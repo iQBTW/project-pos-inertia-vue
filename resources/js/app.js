@@ -7,6 +7,10 @@ import { createInertiaApp} from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { initFlowbite } from 'flowbite';
+import DataTableLib from 'datatables.net-bs5'; ;
+import DataTable from 'datatables.net-vue3' ;
+
+DataTable.use(DataTableLib);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Project POS';
 
@@ -17,6 +21,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .component('DataTable', DataTable)
             .mount(el);
     },
     progress: {

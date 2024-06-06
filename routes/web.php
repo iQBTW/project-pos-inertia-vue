@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 
 Route::get('/', function () {
@@ -24,6 +25,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/category', [CategoryController::class, 'index'])->name('dashboard.category');
+    Route::get('/category/create', [CategoryController::class, 'create'])->name('dashboard.category.create');
+    Route::post('/category', [CategoryController::class, 'store'])->name('dashboard.category.store');
+    Route::put('/category/{id}', [CategoryController::class, 'update'])->name('dashboard.category.update');
 });
 
 require __DIR__ . '/auth.php';

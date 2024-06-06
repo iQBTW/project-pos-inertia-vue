@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/User/Create');
     }
 
     /**
@@ -33,7 +33,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+
+        ]);
     }
 
     /**

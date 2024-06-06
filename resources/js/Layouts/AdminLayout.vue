@@ -10,7 +10,7 @@ onMounted(() => {
 
 <template>
         <Sidebar/>
-        <div class="relative md:ml-0 l:ml-64 lg:ml-64 xl:ml-64">
+        <div class="relative md:ml-0 l:ml-64 lg:ml-64 xl:ml-64 z-0">
             <slot/>
         </div>
 </template>

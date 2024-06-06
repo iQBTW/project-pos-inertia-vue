@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use Inertia\Inertia;
 use App\Models\Category;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $categories = Category::when($request->q, function ($query, $q) {
+            $query->where('name', 'like', '%' . $q . '%');
+        })->get();
+
+        return Inertia::render('Admin/Category/Index', [
+            'categories' => $categories,
+            'search' => $request->only('q'),
+        ]);
     }
 
     /**
@@ -28,9 +36,20 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|unique:categories,name'
+        ]);
+
+        $category = Category::create($validated);
+
+        if ($category) {
+            return redirect()->route('dashboard.category')->with('success', 'Category created successfully');
+        }
+        else {
+            return redirect()->route('dashboard.category')->with('failed', 'Failed to create category');
+        }
     }
 
     /**

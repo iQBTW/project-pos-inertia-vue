@@ -11,13 +11,11 @@ import {
     FwbTableRow,
 } from "flowbite-vue";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
-import { computed } from "vue";
+import { ref } from "vue";
 
-const page = usePage();
+const { props } = usePage();
 
-const users = computed(() => page.props.users)
-
-console.log(users);
+const users = ref(props.users)
 </script>
 
 <template>
@@ -30,21 +28,22 @@ console.log(users);
             <div class="w-full px-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
+                        <fwb-table-head-cell>No</fwb-table-head-cell>
                         <fwb-table-head-cell>Name</fwb-table-head-cell>
                         <fwb-table-head-cell>Email</fwb-table-head-cell>
                         <fwb-table-head-cell>Address</fwb-table-head-cell>
                         <fwb-table-head-cell>
-                            Action
+                            Edit
                         </fwb-table-head-cell>
                     </fwb-table-head>
                     <fwb-table-body>
-                        <fwb-table-row v-for="user in users" :key="user.id">
+                        <fwb-table-row v-for="(user, index) in users" :key="user.id">
+                            <fwb-table-cell>{{ index + 1 }}</fwb-table-cell>
                             <fwb-table-cell>{{ user.name }}</fwb-table-cell>
                             <fwb-table-cell>{{ user.email }}</fwb-table-cell>
                             <fwb-table-cell>{{ user.address }}</fwb-table-cell>
                             <fwb-table-cell>
                                 <fwb-a href="#"> Edit </fwb-a>
-                                <fwb-a href="#"> Delete </fwb-a>
                             </fwb-table-cell>
                         </fwb-table-row>
                     </fwb-table-body>

@@ -6,7 +6,8 @@ import { createApp, h } from 'vue';
 import { createInertiaApp} from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
-import { initFlowbite } from 'flowbite';
+import PrimeVue from 'primevue/config';
+import Lara from '../../public/assets/primevuepreset';
 import DataTableLib from 'datatables.net-bs5'; ;
 import DataTable from 'datatables.net-vue3' ;
 
@@ -22,13 +23,15 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .component('DataTable', DataTable)
+            .use(PrimeVue, {
+                unstyled: true,
+                pt: Lara
+            })
             .mount(el);
     },
     progress: {
         color: '#4B5563',
     },
-}).then(() => {
-    initFlowbite();
-});
+})
 
 

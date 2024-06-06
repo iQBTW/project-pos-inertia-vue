@@ -53,14 +53,14 @@ const showSidebar = ref(true);
                         href="https://flowbite-admin-dashboard.vercel.app/"
                         class="flex ml-2 md:mr-24"
                     >
-                        <img
+                        <!-- <img
                             src="https://flowbite-admin-dashboard.vercel.app/images/logo.svg"
                             class="h-8 mr-3"
                             alt="FlowBite Logo"
-                        />
+                        /> -->
                         <span
                             class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-                            >Flowbite</span
+                            >Dashboard | Tokofy</span
                         >
                     </a>
                     <form
@@ -129,7 +129,7 @@ const showSidebar = ref(true);
         </div>
     </nav>
 
-    <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div class="flex pt-16 overflow-hidden bg-orange-500 dark:bg-gray-900">
         <aside
             class="fixed top-0 left-0 z-20 flex-col flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 transition-width"
             :class="{
@@ -145,12 +145,12 @@ const showSidebar = ref(true);
                 class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700"
             >
                 <div class="flex flex-col flex-1 pb-4">
-                    <fwb-sidebar>
+                    <fwb-sidebar class="shadow-lg">
                         <Link :href="route('dashboard')">
-                            <fwb-sidebar-item>
+                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2">
                                 <template #icon>
                                     <svg
-                                        class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                        class="w-6 h-6 text-gray-500 transition-all duration-75 ease-in dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -164,14 +164,16 @@ const showSidebar = ref(true);
                                         />
                                     </svg>
                                 </template>
-                                <template #default>Dashboard</template>
+                                <template #default>
+                                    Dashboard
+                                </template>
                             </fwb-sidebar-item>
                         </Link>
                         <Link :href="route('dashboard.user')">
-                            <fwb-sidebar-item>
+                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2" >
                                 <template #icon>
                                     <svg
-                                        class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -187,10 +189,10 @@ const showSidebar = ref(true);
                         </Link>
 
                         <Link :href="route('dashboard.user')">
-                            <fwb-sidebar-item>
+                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2">
                                 <template #icon>
                                     <svg
-                                        class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
+                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -204,6 +206,7 @@ const showSidebar = ref(true);
                                 <template #default>Products</template>
                             </fwb-sidebar-item>
                         </Link>
+                        <hr>
                     </fwb-sidebar>
                 </div>
             </div>

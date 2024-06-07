@@ -120,7 +120,6 @@ const showSidebar = ref(true);
                     </button>
 
                     <NotificationDropdown />
-
                     <!-- Dropdown menu -->
                     <DropdownMenu />
                 </div>
@@ -168,27 +167,7 @@ const showSidebar = ref(true);
                                 <template #default> Dashboard </template>
                             </fwb-sidebar-item>
                         </Link>
-                        <Link :href="route('dashboard.user')">
-                            <fwb-sidebar-item
-                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
-                            >
-                                <template #icon>
-                                    <svg
-                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 18"
-                                    >
-                                        <path
-                                            d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"
-                                        />
-                                    </svg>
-                                </template>
-                                <template #default>Users</template>
-                            </fwb-sidebar-item>
-                        </Link>
-                        <Link :href="route('dashboard.user')">
+                        <Link :href="route('product.index')">
                             <fwb-sidebar-item
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                             >
@@ -205,16 +184,40 @@ const showSidebar = ref(true);
                                         />
                                     </svg>
                                 </template>
-                                <template #default>Products</template>
+                                <template #default>Product</template>
                             </fwb-sidebar-item>
                         </Link>
-                        <Link :href="route('dashboard.category')">
+                        <Link :href="route('product.index')">
                             <fwb-sidebar-item
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                             >
                                 <template #icon>
                                     <svg
-                                    class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
+                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-6 8a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1 3a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </template>
+                                <template #default>Order</template>
+                            </fwb-sidebar-item>
+                        </Link>
+                        <Link :href="route('category.index')">
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                            >
+                                <template #icon>
+                                    <svg
+                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -233,6 +236,26 @@ const showSidebar = ref(true);
                                     </svg>
                                 </template>
                                 <template #default>Category</template>
+                            </fwb-sidebar-item>
+                        </Link>
+                        <Link :href="route('user.index')">
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                            >
+                                <template #icon>
+                                    <svg
+                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 18"
+                                    >
+                                        <path
+                                            d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"
+                                        />
+                                    </svg>
+                                </template>
+                                <template #default>User</template>
                             </fwb-sidebar-item>
                         </Link>
                         <hr />

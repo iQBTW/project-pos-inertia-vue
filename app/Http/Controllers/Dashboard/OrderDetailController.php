@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controller\Dashboard;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Models\OrderDetail;
 use App\Http\Requests\StoreOrderDetailRequest;

@@ -1,20 +1,35 @@
 <?php
 
-namespace App\Http\Controller\Dashboard;
+namespace App\Http\Controllers\Dashboard;
 
+use Inertia\Inertia;
 use App\Models\Order;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orders = Order::with('order_details')
+            ->select(
+                'orders.*',
+                'products.name as product',
+                'order_details.qty as qty',
+                'order_details.qty as total'
+            )
+            ->join('order_details', first: 'order_details.order_id', '=', 'orders.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->paginate(10);
+
+        return Inertia::render('Admin/Order/Index', [
+            'orders' => $orders,
+        ]);
     }
 
     /**

@@ -21,18 +21,19 @@ const props = defineProps({
 
 const emit = defineEmits(['search'])
 
+// Searchbar
 const search = ref('');
 const onSearch = () => {
-    router.get(route('dashboard.user'), {q: search.value}, {
+    router.get(route('user.index'), {q: search.value}, {
             preserveState: true,
             replace: true
         });
 }
 watch(search, (value) => {
     emit('search', value)
-    console.log(value);
 });
 
+// Pagination
 const pageTo = (url) => {
     router.get(url)
 }
@@ -82,7 +83,7 @@ const pageTo = (url) => {
             </div>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2">
+        <div class="flex justify-center pt-2 pb-2">
             <div class="w-full px-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
@@ -90,7 +91,7 @@ const pageTo = (url) => {
                         <fwb-table-head-cell>Name</fwb-table-head-cell>
                         <fwb-table-head-cell>Email</fwb-table-head-cell>
                         <fwb-table-head-cell>Address</fwb-table-head-cell>
-                        <fwb-table-head-cell> Edit </fwb-table-head-cell>
+                        <fwb-table-head-cell>Action</fwb-table-head-cell>
                     </fwb-table-head>
                     <fwb-table-body>
                         <fwb-table-row
@@ -101,13 +102,18 @@ const pageTo = (url) => {
                             <fwb-table-cell>{{ user.name }}</fwb-table-cell>
                             <fwb-table-cell>{{ user.email }}</fwb-table-cell>
                             <fwb-table-cell>{{ user.address }}</fwb-table-cell>
-                            <fwb-table-cell>
-                                <fwb-a href="#"> Edit </fwb-a>
+                            <fwb-table-cell class="flex gap-2">
+                                <Button class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300">
+                                    <a href="#">Edit</a>
+                                </Button>
+                                <Button severity="danger" class="transition-all ease-in 3s border hover:text-white hover:bg-red-800">
+                                    <a href="#">Delete</a>
+                                </Button>
                             </fwb-table-cell>
                         </fwb-table-row>
                     </fwb-table-body>
                 </fwb-table>
-                <div class="flex items-center justify-center mt-2 gap-3">
+                <div class="flex items-center justify-between mt-2 gap-3">
                     <span class="text-sm text-gray-700 dark:text-gray-400">
                         Showing
                         <span

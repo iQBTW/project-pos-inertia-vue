@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controller\Dashboard;
+namespace App\Http\Controllers\Dashboard;
 
 use Inertia\Inertia;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
@@ -16,12 +15,24 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::when($request->q, function ($query, $q) {
-            $query->where('name', 'like', '%' . $q . '%');
-            $query->orWhere('description', 'like', '%' . $q . '%');
-        })->paginate(10);
+        $products = Product::with('categories')
+            ->select(
+                'products.*',
+                'categories.name as category',
+                'product_images.image as image'
+            )
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('product_images', 'product_images.product_id', '=', 'products.id')
+            ->when($request->q, function ($query, $q) {
+                $query->where('products.name', 'like', '%' . $q . '%');
+                $query->orWhere('categories.name', 'like', '%' . $q . '%');
+            })->paginate(10);
 
-        return Inertia::render('Admin/Category/Index', [
+        foreach ($products as $product) {
+            $product->price = currencyFormat($product->price);
+        }
+
+        return Inertia::render('Admin/Product/Index', [
             'products' => $products,
             'search' => $request->only('q'),
         ]);
@@ -38,7 +49,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -62,7 +73,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
         //
     }

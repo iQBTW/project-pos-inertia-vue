@@ -2,19 +2,29 @@
 
 namespace App\Http\Controller\Dashboard;
 
+use Inertia\Inertia;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $products = Product::when($request->q, function ($query, $q) {
+            $query->where('name', 'like', '%' . $q . '%');
+            $query->orWhere('description', 'like', '%' . $q . '%');
+        })->paginate(10);
+
+        return Inertia::render('Admin/Category/Index', [
+            'products' => $products,
+            'search' => $request->only('q'),
+        ]);
     }
 
     /**

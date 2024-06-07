@@ -12,9 +12,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all()->toArray();
+        $users = User::when($request->q, function ($query, $q) {
+            $query->where('name', 'like', '%' . $q . '%');
+            $query->orWhere('email', 'like', '%' . $q . '%');
+            $query->orWhere('address', 'like', '%' . $q . '%');
+        })->paginate(10);
+
         return Inertia::render('Admin/User/Index', [
             'users' => $users
         ]);

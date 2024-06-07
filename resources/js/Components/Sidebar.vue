@@ -5,7 +5,6 @@ import { ref } from "vue";
 import DropdownMenu from "@/Components/DropdownMenu.vue";
 import NotificationDropdown from "@/Components/NotificationDropdown.vue";
 
-
 const showSidebar = ref(true);
 </script>
 <template>
@@ -120,9 +119,9 @@ const showSidebar = ref(true);
                         </svg>
                     </button>
 
-                    <NotificationDropdown/>
+                    <NotificationDropdown />
 
-                        <!-- Dropdown menu -->
+                    <!-- Dropdown menu -->
                     <DropdownMenu />
                 </div>
             </div>
@@ -147,7 +146,9 @@ const showSidebar = ref(true);
                 <div class="flex flex-col flex-1 pb-4">
                     <fwb-sidebar class="shadow-lg">
                         <Link :href="route('dashboard')">
-                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2">
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                            >
                                 <template #icon>
                                     <svg
                                         class="w-6 h-6 text-gray-500 transition-all duration-75 ease-in dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -164,13 +165,13 @@ const showSidebar = ref(true);
                                         />
                                     </svg>
                                 </template>
-                                <template #default>
-                                    Dashboard
-                                </template>
+                                <template #default> Dashboard </template>
                             </fwb-sidebar-item>
                         </Link>
                         <Link :href="route('dashboard.user')">
-                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2" >
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                            >
                                 <template #icon>
                                     <svg
                                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -188,7 +189,9 @@ const showSidebar = ref(true);
                             </fwb-sidebar-item>
                         </Link>
                         <Link :href="route('dashboard.user')">
-                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2">
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                            >
                                 <template #icon>
                                     <svg
                                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
@@ -206,24 +209,33 @@ const showSidebar = ref(true);
                             </fwb-sidebar-item>
                         </Link>
                         <Link :href="route('dashboard.category')">
-                            <fwb-sidebar-item class="hover:bg-slate-200 transition-all ease-in 3s mt-2">
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                            >
                                 <template #icon>
                                     <svg
-                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
+                                    class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
                                         fill="currentColor"
-                                        viewBox="0 0 18 20"
+                                        viewBox="0 0 24 24"
                                     >
                                         <path
-                                            d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"
+                                            fill-rule="evenodd"
+                                            d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
+                                            clip-rule="evenodd"
+                                        />
+                                        <path
+                                            d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"
                                         />
                                     </svg>
                                 </template>
                                 <template #default>Category</template>
                             </fwb-sidebar-item>
                         </Link>
-                        <hr>
+                        <hr />
                     </fwb-sidebar>
                 </div>
             </div>

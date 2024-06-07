@@ -17,7 +17,7 @@ class CategoryController extends Controller
     {
         $categories = Category::when($request->q, function ($query, $q) {
             $query->where('name', 'like', '%' . $q . '%');
-        })->get();
+        })->paginate(5);
 
         return Inertia::render('Admin/Category/Index', [
             'categories' => $categories,

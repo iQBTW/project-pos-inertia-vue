@@ -143,26 +143,52 @@ function storeCategory() {
                     </fwb-table-head>
                     <fwb-table-body>
                         <fwb-table-row
-                            v-for="(category, index) in categories"
+                            v-for="(category, index) in categories.data"
                             :key="category.id"
                         >
                             <fwb-table-cell>{{ index + 1 }}</fwb-table-cell>
                             <fwb-table-cell>{{ category.name }}</fwb-table-cell>
                             <fwb-table-cell class="flex gap-2">
-                                <Button severity="warning">
-                                    <fwb-a
-                                        href="#"
-                                    >
-                                        Edit
-                                    </fwb-a>
+                                <Button class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300">
+                                    <a href="#">Edit</a>
                                 </Button>
-                                <Button severity="danger">
-                                <fwb-a href="#"> Delete </fwb-a>
+                                <Button severity="danger" class="transition-all ease-in 3s border hover:text-white hover:bg-red-800">
+                                    <a href="#">Delete</a>
                                 </Button>
                             </fwb-table-cell>
                         </fwb-table-row>
                     </fwb-table-body>
                 </fwb-table>
+                <div class="flex items-center justify-center mt-2 gap-3">
+                    <span class="text-sm text-gray-700 dark:text-gray-400">
+                        Showing
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
+                            >1</span
+                        >
+                        to
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
+                            >{{ categories.per_page }}</span
+                        >
+                        of
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
+                            >{{ categories.total }}</span
+                        >
+                        Entries
+                    </span>
+                    <ul class="flex items-center -space-x-px h-10 text-base">
+                        <li v-for="(item,index) in categories.links" :key="index">
+                            <a
+                                href="#" @click="pageTo(item.url)"
+                                :class="{'bg-primary-500 text-white transition-all ease-in 3s' : item.active}"
+                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border rounded-md border-gray-300 hover:bg-primary-500 hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-all ease-in 3s"
+                                v-html="item.label"></a
+                            >
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </AdminLayout>

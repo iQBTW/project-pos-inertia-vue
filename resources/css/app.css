@@ -2,6 +2,17 @@
 /* @import 'flowbite-vue/dist/flowbite-vue.css'; */
 @import 'datatables.net-bs5';
 
+@layer tailwind-base, primevue, tailwind-utilities;
+
+@layer tailwind-base {
+    @tailwind base;
+}
+
+@layer tailwind-utilities {
+    @tailwind components;
+    @tailwind utilities;
+}
+
 :root {
     --primary-50: 236 253 245;
     --primary-100: 209 250 229;
@@ -71,18 +82,6 @@
 
     }
 }
-
-@layer tailwind-base, primevue, tailwind-utilities;
-
-@layer tailwind-base {
-    @tailwind base;
-}
-
-@layer tailwind-utilities {
-    @tailwind components;
-    @tailwind utilities;
-}
-
 
 
 

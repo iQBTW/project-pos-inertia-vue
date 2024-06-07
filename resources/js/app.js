@@ -7,7 +7,7 @@ import { createInertiaApp} from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import PrimeVue from 'primevue/config';
-import Lara from '../../public/assets/primevuepreset';
+import Lara from '../../public/assets/primevuepreset/lara';
 import DataTableLib from 'datatables.net-bs5'; ;
 import DataTable from 'datatables.net-vue3' ;
 
@@ -25,7 +25,7 @@ createInertiaApp({
             .component('DataTable', DataTable)
             .use(PrimeVue, {
                 unstyled: true,
-                pt: Lara
+                pt: Lara,
             })
             .mount(el);
     },

@@ -16,16 +16,26 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::with('order_details')
-            ->select(
-                'orders.*',
-                'products.name as product',
-                'order_details.qty as qty',
-                'order_details.qty as total'
-            )
-            ->join('order_details', first: 'order_details.order_id', '=', 'orders.id')
+        $orders = Order::select(
+            'orders.*',
+            'users.name as customer',
+            'products.name as product',
+            'order_details.qty as qty',
+            'order_details.total as total'
+        )
+            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
             ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->when($request->q, function ($query, $q) {
+                $query->where('orders', 'like', '%' . $q . '%');
+                $query->where('products.name', 'like', '%' . $q . '%');
+            })
             ->paginate(10);
+
+        foreach ($orders as $data) {
+            $data->total = currencyFormat($data->total);
+            $data->amount = currencyFormat($data->amount);
+        }
 
         return Inertia::render('Admin/Order/Index', [
             'orders' => $orders,

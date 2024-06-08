@@ -187,7 +187,7 @@ const showSidebar = ref(true);
                                 <template #default>Product</template>
                             </fwb-sidebar-item>
                         </Link>
-                        <Link :href="route('product.index')">
+                        <Link :href="route('order.index')">
                             <fwb-sidebar-item
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                             >

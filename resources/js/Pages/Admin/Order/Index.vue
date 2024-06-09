@@ -57,7 +57,7 @@ const showModal = ref(false);
             </div>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2">
+        <div class="flex justify-center pt-2 pb-2">
             <div class="w-full px-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
@@ -93,7 +93,7 @@ const showModal = ref(false);
                         </fwb-table-row>
                     </fwb-table-body>
                 </fwb-table>
-                <div class="flex items-center justify-center mt-2 gap-3">
+                <div class="flex items-center justify-between mt-2 gap-3">
                     <span class="text-sm text-gray-700 dark:text-gray-400">
                         Showing
                         <span

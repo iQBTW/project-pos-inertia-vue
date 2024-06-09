@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Models\ProductImage;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Category;
@@ -43,7 +44,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Product/Create', [
+            'categories' => Category::all(),
+        ]);
     }
 
     /**
@@ -51,7 +54,31 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+            'stock' => 'required',
+            'price' => 'required',
+            'category_id' => 'required',
+            'images' => 'required',
+        ]);
+
+        $product = new Product;
+        $product->name = $validated['name'];
+        $product->stock = $validated['stock'];
+        $product->price = $validated['price'];
+        $product->category_id = $validated['category_id'];
+        $product->save();
+
+        foreach ($request->file('images') as $imageFiles) {
+            $images = new ProductImage;
+            $fileName = $imageFiles->getClientOriginalName();
+            $path = $imageFiles->storeAs('product', $fileName, 'public');
+            $images->image = $path;
+            $images->product_id = $product->id;
+            $images->save();
+        }
+
+        return redirect(route('product.index'))->with('success', 'Product created successfully');
     }
 
     /**

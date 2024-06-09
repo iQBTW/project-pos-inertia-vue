@@ -27,8 +27,8 @@ class OrderController extends Controller
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->join('users', 'orders.user_id', '=', 'users.id')
             ->when($request->q, function ($query, $q) {
-                $query->where('orders', 'like', '%' . $q . '%');
-                $query->where('products.name', 'like', '%' . $q . '%');
+                $query->where('users.name', 'like', '%' . $q . '%');
+                $query->orWhere('products.name', 'like', '%' . $q . '%');
             })
             ->paginate(10);
 

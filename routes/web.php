@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\ProductImageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Route::get('/', function () {
@@ -36,9 +37,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
     Route::prefix('product')->name('product.')->group(function () {
         Route::get('', [ProductController::class, 'index'])->name('index');
         Route::get('create', [ProductController::class, 'create'])->name('create');
+        Route::get('{product}/edit', [ProductController::class, 'edit'])->name('edit');
         Route::post('store', [ProductController::class, 'store'])->name('store');
         Route::put('{product}', [ProductController::class, 'update'])->name('update');
         Route::delete('{product}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::get('{productImage}/image', [ProductImageController::class, 'destroy'])->name('destroyimage');
     });
 
     Route::prefix('order')->name('order.')->group(function () {

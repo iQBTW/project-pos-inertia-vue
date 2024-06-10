@@ -21,7 +21,8 @@ class UserController extends Controller
         })->paginate(10);
 
         return Inertia::render('Admin/User/Index', [
-            'users' => $users
+            'users' => $users,
+            'search' => $request->only('q')
         ]);
     }
 

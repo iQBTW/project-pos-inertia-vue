@@ -35,6 +35,11 @@ watch(search, (value) => {
     emit("search", value);
 });
 
+//to Edit
+const edit = (id) => {
+    router.get("/dashboard/product" + "/" + id + "/edit")
+}
+
 // Pagination
 const pageTo = (url) => {
     router.get(url);
@@ -177,8 +182,9 @@ const pageTo = (url) => {
                             <fwb-table-cell class="flex gap-2">
                                 <Button
                                     class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300"
+                                    @click.prevent="edit(product.id)"
                                 >
-                                    <a href="#">Edit</a>
+                                    Edit
                                 </Button>
                                 <Button
                                     severity="danger"

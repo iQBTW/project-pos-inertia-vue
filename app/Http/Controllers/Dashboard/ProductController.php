@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Models\ProductImage;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
@@ -55,30 +56,41 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'stock' => 'required',
-            'price' => 'required',
-            'category_id' => 'required',
-            'images' => 'required',
+            'name' => 'required|unique:products,name|max:255',
+            'stock' => 'required|numeric',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'images' => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        $product = new Product;
-        $product->name = $validated['name'];
-        $product->stock = $validated['stock'];
-        $product->price = $validated['price'];
-        $product->category_id = $validated['category_id'];
-        $product->save();
+        DB::beginTransaction();
 
-        foreach ($request->file('images') as $imageFiles) {
-            $images = new ProductImage;
-            $fileName = $imageFiles->getClientOriginalName();
-            $path = $imageFiles->storeAs('product', $fileName, 'public');
-            $images->image = $path;
-            $images->product_id = $product->id;
-            $images->save();
+        try {
+            $product = new Product;
+            $product->name = $validated['name'];
+            $product->stock = $validated['stock'];
+            $product->price = $validated['price'];
+            $product->category_id = $validated['category_id'];
+            $product->save();
+
+            foreach ($request->file('images') as $imageFiles) {
+                $images = new ProductImage;
+                $fileName = $imageFiles->getClientOriginalName();
+                $path = $imageFiles->storeAs('product', $fileName, 'public');
+                $images->image = $path;
+                $images->product_id = $product->id;
+                $images->save();
+            }
+
+            DB::commit();
+
+            return redirect(route('product.index'))->with('success', 'Product created successfully');
         }
+        catch (\Throwable $e) {
+            DB::rollBack();
 
-        return redirect(route('product.index'))->with('success', 'Product created successfully');
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -110,6 +122,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        dd($product);
     }
 }

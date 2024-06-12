@@ -146,14 +146,19 @@ const showSidebar = ref(true);
                     <fwb-sidebar class="shadow-lg">
                         <Link :href="route('dashboard')">
                             <fwb-sidebar-item
-                            :class="{
-                                    '!bg-primary-600 !text-black': route().current('dashboard'),}"
+                                :class="{
+                                    '!bg-primary-600 !text-black':
+                                        route().current('dashboard'),
+                                }"
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                             >
                                 <template #icon>
                                     <svg
                                         class="w-6 h-6 text-gray-500 transition-all duration-75 ease-in dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                        :class="{'!text-gray-900': route().current('dashboard')}"
+                                        :class="{
+                                            '!text-gray-900':
+                                                route().current('dashboard'),
+                                        }"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -172,13 +177,21 @@ const showSidebar = ref(true);
                         </Link>
                         <Link :href="route('product.index')">
                             <fwb-sidebar-item
-                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2" :class="{
-                                    '!bg-primary-600 !text-black': route().current('product.index'),}"
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                                :class="{
+                                    '!bg-primary-600 !text-black':
+                                        route().current('product.index'),
+                                }"
                             >
                                 <template #icon>
                                     <svg
                                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
-                                        :class="{'!text-gray-900': route().current('product.index')}"
+                                        :class="{
+                                            '!text-gray-900':
+                                                route().current(
+                                                    'product.index'
+                                                ),
+                                        }"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -196,12 +209,17 @@ const showSidebar = ref(true);
                             <fwb-sidebar-item
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                                 :class="{
-                                    '!bg-primary-600 !text-black': route().current('order.index')}"
+                                    '!bg-primary-600 !text-black':
+                                        route().current('order.index'),
+                                }"
                             >
                                 <template #icon>
                                     <svg
                                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
-                                        :class="{'!text-gray-900': route().current('order.index')}"
+                                        :class="{
+                                            '!text-gray-900':
+                                                route().current('order.index'),
+                                        }"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -223,12 +241,19 @@ const showSidebar = ref(true);
                             <fwb-sidebar-item
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                                 :class="{
-                                    '!bg-primary-600 !text-black': route().current('category.index'),}"
+                                    '!bg-primary-600 !text-black':
+                                        route().current('category.index'),
+                                }"
                             >
                                 <template #icon>
                                     <svg
                                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white active:text-gray-900 dark:active:text-white"
-                                        :class="{'!text-gray-900': route().current('category.index')}"
+                                        :class="{
+                                            '!text-gray-900':
+                                                route().current(
+                                                    'category.index'
+                                                ),
+                                        }"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -253,12 +278,17 @@ const showSidebar = ref(true);
                             <fwb-sidebar-item
                                 class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
                                 :class="{
-                                    '!bg-primary-600 !text-black': route().current('user.index'),}"
+                                    '!bg-primary-600 !text-black':
+                                        route().current('user.index'),
+                                }"
                             >
                                 <template #icon>
                                     <svg
                                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                        :class="{'!text-gray-900': route().current('user.index')}"
+                                        :class="{
+                                            '!text-gray-900':
+                                                route().current('user.index'),
+                                        }"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -273,6 +303,38 @@ const showSidebar = ref(true);
                             </fwb-sidebar-item>
                         </Link>
                         <hr />
+                        <Link :href="route('transaction.index')">
+                            <fwb-sidebar-item
+                                class="hover:bg-slate-200 transition-all ease-in 3s mt-2"
+                                :class="{
+                                    '!bg-primary-600 !text-black':
+                                        route().current('transaction.index'),
+                                }"
+                            >
+                                <template #icon>
+                                    <svg
+                                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition-all ease-in duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                        :class="{
+                                            '!text-gray-900':
+                                                route().current('transaction.index'),
+                                        }"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M4 4a1 1 0 0 1 1-1h1.5a1 1 0 0 1 .979.796L7.939 6H19a1 1 0 0 1 .979 1.204l-1.25 6a1 1 0 0 1-.979.796H9.605l.208 1H17a3 3 0 1 1-2.83 2h-2.34a3 3 0 1 1-4.009-1.76L5.686 5H5a1 1 0 0 1-1-1Z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </template>
+                                <template #default>Shop</template>
+                            </fwb-sidebar-item>
+                        </Link>
                     </fwb-sidebar>
                 </div>
             </div>

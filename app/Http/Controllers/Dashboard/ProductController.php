@@ -119,9 +119,45 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Product::with('product_images')->findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'max:255',
+            'stock' => 'numeric',
+            'price' => 'numeric',
+            'category_id' => 'exists:categories,id',
+            'productImage' => 'image|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $product->name = $validated['name'];
+            $product->stock = $validated['stock'];
+            $product->price = $validated['price'];
+            $product->category_id = $validated['category_id'];
+            $product->save();
+
+            foreach ($request->file('productImage') as $imagesFile) {
+                $product_image = new ProductImage;
+                $fileName = $imagesFile->getClientOriginalName();
+                $path = $imagesFile->storeAs('product', $fileName, 'public');
+                $product_image->image = $path;
+                $product_image->product_id = $product->id;
+                $product_image->save();
+            }
+
+            DB::commit();
+
+            return redirect(route('product.index'))->with('success', 'Product has been updated succesfully');
+        }
+        catch (\Throwable $e) {
+            DB::rollback();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -129,6 +165,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        dd($product);
+        $product->delete();
+
+        return redirect(route('product.index'))->with('success', 'Product has been deleted succesfully');
     }
 }

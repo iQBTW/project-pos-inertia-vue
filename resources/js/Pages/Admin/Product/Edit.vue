@@ -15,15 +15,15 @@ const formProduct = useForm({
     stock: props.product.stock,
     price: props.product.price,
     category_id: props.product.category_id,
-    productImage: props.productImage.image,
+    productImage: '',
 });
 
 function onFileChange(e) {
-    formProduct.images = e.target.files;
+    formProduct.productImage = e.target.files;
 }
 
-function updateProduct() {
-    router.post(route("product.update"), formProduct);
+function updateProduct(id) {
+    router.post("/dashboard/product/" + id, formProduct);
 }
 
 function deleteImage() {
@@ -103,7 +103,7 @@ function deleteImage() {
 
         <!-- Content Section -->
         <div class="p-4 bg-white w-[600px] rounded mt-5 mb-5 mx-auto">
-            <form @submit.prevent="updateProduct">
+            <form @submit.prevent="updateProduct(product.id)">
                 <div class="flex flex-col items-center">
                     <div class="py-2">
                         <div class="py-2">
@@ -147,7 +147,7 @@ function deleteImage() {
                         </div>
                         <select
                             name="category_id"
-                            class="flex-auto w-[295px] w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             id=""
                             v-model="formProduct.category_id"
                         >
@@ -168,8 +168,8 @@ function deleteImage() {
                         <input
                             type="file"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            name="images"
-                            id=""
+                            name="productImage"
+                            id="productImage"
                             @change="onFileChange"
                             multiple
                         />

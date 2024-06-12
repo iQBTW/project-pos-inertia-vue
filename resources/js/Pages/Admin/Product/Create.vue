@@ -143,7 +143,7 @@ function storeProduct() {
                         </div>
                         <select
                             name="category_id"
-                            class="flex-auto w-[295px] w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             id=""
                             v-model="formProduct.category_id"
                         >

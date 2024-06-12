@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\ProductImageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
@@ -32,6 +33,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('', [UserController::class, 'index'])->name('index');
+        Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('product')->name('product.')->group(function () {
@@ -46,6 +48,10 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     Route::prefix('order')->name('order.')->group(function () {
         Route::get('', [OrderController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('transaction')->name('transaction.')->group(function () {
+        Route::get('', [TransactionController::class, 'index'])->name('index');
     });
 
     Route::prefix('category')->name('category.')->group(function () {

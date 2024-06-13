@@ -15,15 +15,28 @@ const formProduct = useForm({
     stock: null,
     price: null,
     category_id: null,
-    images: null,
+    images: [],
 });
 
-function onFileChange(e) {
-    formProduct.images = e.target.files;
+const onFileChange = (e) => {
+    formProduct.images = Array.from(e.target.files);
 }
 
-function storeProduct() {
-    router.post(route("product.store"), formProduct);
+const storeProduct = () => {
+    const formData = new FormData();
+    formData.append('name', formProduct.name);
+    formData.append('stock', formProduct.stock);
+    formData.append('price', formProduct.price);
+    formData.append('category_id', formProduct.category_id);
+    for (let i = 0; i < formProduct.images.length; i++) {
+        formData.append('images[]', formProduct.images[i]);
+    }
+
+    router.post(route("product.store"), formData, {
+        onError: (errors) => {
+            console.log(errors);
+        }
+    });
 }
 </script>
 
@@ -147,7 +160,7 @@ function storeProduct() {
                             id=""
                             v-model="formProduct.category_id"
                         >
-                            <option value="">Category</option>
+                            <option value="" selected>Category</option>
                             <option
                                 v-for="category in categories"
                                 :key="category.id"

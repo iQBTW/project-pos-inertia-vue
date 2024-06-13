@@ -17,14 +17,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::with('categories')
+        $products = Product::with('product_images')
             ->select(
                 'products.*',
                 'categories.name as category',
-                'product_images.image as image'
             )
             ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->leftJoin('product_images', 'product_images.product_id', '=', 'products.id')
             ->when($request->q, function ($query, $q) {
                 $query->where('products.name', 'like', '%' . $q . '%');
                 $query->orWhere('categories.name', 'like', '%' . $q . '%');
@@ -60,26 +58,31 @@ class ProductController extends Controller
             'stock' => 'required|numeric',
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
-            'images' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         DB::beginTransaction();
 
         try {
-            $product = new Product;
-            $product->name = $validated['name'];
-            $product->stock = $validated['stock'];
-            $product->price = $validated['price'];
-            $product->category_id = $validated['category_id'];
-            $product->save();
+            $product = Product::create([
+                'name' => $validated['name'],
+                'stock' => $validated['stock'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+            ]);
 
-            foreach ($request->file('images') as $imageFiles) {
-                $images = new ProductImage;
-                $fileName = $imageFiles->getClientOriginalName();
-                $path = $imageFiles->storeAs('product', $fileName, 'public');
-                $images->image = $path;
-                $images->product_id = $product->id;
-                $images->save();
+            // Proses gambar-gambar yang diupload
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $imageFile) {
+                    $fileName = time() . '_' . $imageFile->getClientOriginalName();
+                    $path = $imageFile->storeAs('product', $fileName, 'public');
+
+                    // Buat entri baru untuk setiap gambar
+                    ProductImage::create([
+                        'image' => $path,
+                        'product_id' => $product->id,
+                    ]);
+                }
             }
 
             DB::commit();
@@ -112,7 +115,6 @@ class ProductController extends Controller
         return Inertia::render('Admin/Product/Edit', [
             'categories' => Category::all(),
             'product' => $product,
-            'productImage' => $product->product_images
         ]);
     }
 
@@ -121,33 +123,38 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Product::with('product_images')->findOrFail($id);
+        $product = Product::findOrFail($id);
+        // $product_images = ProductImage::where('id', $id);
 
         $validated = $request->validate([
-            'name' => 'max:255',
-            'stock' => 'numeric',
-            'price' => 'numeric',
-            'category_id' => 'exists:categories,id',
-            'productImage' => 'image|mimes:jpeg,jpg,png|max:2048',
+            'name' => 'required|string|max:255',
+            'stock' => 'required|numeric',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            // 'images' => 'required',
+            // 'images.*' => 'image|mimes:jpg, jpeg, png|max:2048',
         ]);
 
         DB::beginTransaction();
 
         try {
-            $product->name = $validated['name'];
-            $product->stock = $validated['stock'];
-            $product->price = $validated['price'];
-            $product->category_id = $validated['category_id'];
-            $product->save();
+            $product->update([
+                'name' => $validated['name'],
+                'stock' => $validated['stock'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+            ]);
 
-            foreach ($request->file('productImage') as $imagesFile) {
-                $product_image = new ProductImage;
-                $fileName = $imagesFile->getClientOriginalName();
-                $path = $imagesFile->storeAs('product', $fileName, 'public');
-                $product_image->image = $path;
-                $product_image->product_id = $product->id;
-                $product_image->save();
-            }
+            // if ($request->hasFile('images')) {
+            //     foreach ($request->file('images') as $file) {
+            //         $fileName = $file->getClientOriginalName();
+            //         $path = $file->storeAs('product', $fileName, 'public');
+            //         ProductImage::create([
+            //             'image' => $path,
+            //             'product_id' => $product->id,
+            //         ]);
+            //     }
+            // }
 
             DB::commit();
 
@@ -168,5 +175,12 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect(route('product.index'))->with('success', 'Product has been deleted succesfully');
+    }
+
+    public function deleteImage($id)
+    {
+        ProductImage::where('id', $id)->delete();
+
+        return redirect()->back()->with('success', 'Image has been deleted succesfully');
     }
 }

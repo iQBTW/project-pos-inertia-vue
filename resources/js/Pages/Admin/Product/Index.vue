@@ -35,6 +35,16 @@ watch(search, (value) => {
     emit("search", value);
 });
 
+//Edit
+const editProduct = (id) => {
+    router.get("/dashboard/product" + "/" + id + "/edit")
+}
+
+//Delete
+const deleteProduct = (id) => {
+    router.delete("/dashboard/product/" + id);
+}
+
 // Pagination
 const pageTo = (url) => {
     router.get(url);
@@ -117,7 +127,7 @@ const pageTo = (url) => {
                             name="categoriesSearch"
                             id="categories-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 transition-all ease-in 3s"
-                            placeholder="Search categories"
+                            placeholder="Search products"
                         />
                     </Searchbar>
                     <div
@@ -177,14 +187,16 @@ const pageTo = (url) => {
                             <fwb-table-cell class="flex gap-2">
                                 <Button
                                     class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300"
+                                    @click.prevent="editProduct(product.id)"
                                 >
-                                    <a href="#">Edit</a>
+                                    Edit
                                 </Button>
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
+                                    @click.prevent="deleteProduct(product.id)"
                                 >
-                                    <a href="#">Delete</a>
+                                    Delete
                                 </Button>
                             </fwb-table-cell>
                         </fwb-table-row>

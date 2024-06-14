@@ -21,7 +21,8 @@ class UserController extends Controller
         })->paginate(10);
 
         return Inertia::render('Admin/User/Index', [
-            'users' => $users
+            'users' => $users,
+            'search' => $request->only('q')
         ]);
     }
 
@@ -30,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/User/Create');
+        // return Inertia::render('Admin/User/Create');
     }
 
     /**
@@ -38,10 +39,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-
-        ]);
+        // $validated = $request->validate([
+        //     'name' => 'required',
+        // ]);
     }
 
     /**
@@ -73,6 +73,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return redirect(route('user.index'))->with('success', 'User has been deleted succesfully');
     }
 }

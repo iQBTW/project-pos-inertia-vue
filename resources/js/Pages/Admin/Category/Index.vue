@@ -42,6 +42,11 @@ watch(search, (value) => {
     emit("search", value);
 });
 
+//Delete
+const deleteCategory = (id) => {
+    router.delete('/dashboard/category/' + id)
+}
+
 // Pagination
 const pageTo = (url) => {
     router.get(url);
@@ -265,8 +270,9 @@ const updateCategory = async (id) => {
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
+                                    @click.prevent="deleteCategory(category.id)"
                                 >
-                                    <a href="#">Delete</a>
+                                    Delete
                                 </Button>
                             </fwb-table-cell>
                         </fwb-table-row>

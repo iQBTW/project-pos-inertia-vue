@@ -17,14 +17,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::with('categories')
+        $products = Product::with('product_images')
             ->select(
                 'products.*',
                 'categories.name as category',
-                'product_images.image as image'
             )
             ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->leftJoin('product_images', 'product_images.product_id', '=', 'products.id')
             ->when($request->q, function ($query, $q) {
                 $query->where('products.name', 'like', '%' . $q . '%');
                 $query->orWhere('categories.name', 'like', '%' . $q . '%');
@@ -60,26 +58,31 @@ class ProductController extends Controller
             'stock' => 'required|numeric',
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
-            'images' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         DB::beginTransaction();
 
         try {
-            $product = new Product;
-            $product->name = $validated['name'];
-            $product->stock = $validated['stock'];
-            $product->price = $validated['price'];
-            $product->category_id = $validated['category_id'];
-            $product->save();
+            $product = Product::create([
+                'name' => $validated['name'],
+                'stock' => $validated['stock'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+            ]);
 
-            foreach ($request->file('images') as $imageFiles) {
-                $images = new ProductImage;
-                $fileName = $imageFiles->getClientOriginalName();
-                $path = $imageFiles->storeAs('product', $fileName, 'public');
-                $images->image = $path;
-                $images->product_id = $product->id;
-                $images->save();
+            // Proses gambar-gambar yang diupload
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $imageFile) {
+                    $fileName = time() . '_' . $imageFile->getClientOriginalName();
+                    $path = $imageFile->storeAs('product', $fileName, 'public');
+
+                    // Buat entri baru untuk setiap gambar
+                    ProductImage::create([
+                        'image' => $path,
+                        'product_id' => $product->id,
+                    ]);
+                }
             }
 
             DB::commit();
@@ -104,17 +107,64 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        //
+        $product = Product::with('product_images')->findOrFail($id);
+        $product->price = number_format($product->price, 0, '.', '');
+
+        return Inertia::render('Admin/Product/Edit', [
+            'categories' => Category::all(),
+            'product' => $product,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        // $product_images = ProductImage::where('id', $id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'stock' => 'required|numeric',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            // 'images' => 'required',
+            // 'images.*' => 'image|mimes:jpg, jpeg, png|max:2048',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $product->update([
+                'name' => $validated['name'],
+                'stock' => $validated['stock'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+            ]);
+
+            // if ($request->hasFile('images')) {
+            //     foreach ($request->file('images') as $file) {
+            //         $fileName = $file->getClientOriginalName();
+            //         $path = $file->storeAs('product', $fileName, 'public');
+            //         ProductImage::create([
+            //             'image' => $path,
+            //             'product_id' => $product->id,
+            //         ]);
+            //     }
+            // }
+
+            DB::commit();
+
+            return redirect(route('product.index'))->with('success', 'Product has been updated succesfully');
+        }
+        catch (\Throwable $e) {
+            DB::rollback();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -122,6 +172,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        dd($product);
+        $product->delete();
+
+        return redirect(route('product.index'))->with('success', 'Product has been deleted succesfully');
+    }
+
+    public function deleteImage($id)
+    {
+        ProductImage::where('id', $id)->delete();
+
+        return redirect()->back()->with('success', 'Image has been deleted succesfully');
     }
 }

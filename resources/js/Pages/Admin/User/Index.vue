@@ -37,6 +37,11 @@ watch(search, (value) => {
     emit("search", value);
 });
 
+//Delete
+const deleteUser = (id) => {
+    router.delete('/dashboard/user/' + id);
+}
+
 // Pagination
 const pageTo = (url) => {
     router.get(url);
@@ -120,7 +125,7 @@ const pageTo = (url) => {
                             name="categoriesSearch"
                             id="categories-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 transition-all ease-in 3s"
-                            placeholder="Search categories"
+                            placeholder="Search users"
                         />
                     </Searchbar>
                     <div
@@ -179,8 +184,9 @@ const pageTo = (url) => {
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
+                                    @click.prevent = "deleteUser(user.id)"
                                 >
-                                    <a href="#">Delete</a>
+                                    Delete
                                 </Button>
                             </fwb-table-cell>
                         </fwb-table-row>

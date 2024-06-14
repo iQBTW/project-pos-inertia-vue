@@ -35,6 +35,7 @@ const updateProduct = (id) => {
     formData.append('stock', formProduct.stock);
     formData.append('price', formProduct.price);
     formData.append('category_id', formProduct.category_id);
+    formData.append('_method', 'PUT');
     for (let i = 0; i < formProduct.images.length; i++) {
         formData.append('images[]', formProduct.images[i]);
     }
@@ -47,15 +48,12 @@ const updateProduct = (id) => {
         images: formProduct.images
     });
 
-    router.put(`/dashboard/product/${id}`, formData,
+    router.post(`/dashboard/product/${id}`, formData,
     {
-        _method: "PUT",
         onError: (errors) => {
             console.log(errors);
         },
     });
-
-
 };
 
 const deleteImage = () => {

@@ -165,7 +165,6 @@ const pageTo = (url) => {
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>
                         <fwb-table-head-cell>Name</fwb-table-head-cell>
-                        <fwb-table-head-cell>Image</fwb-table-head-cell>
                         <fwb-table-head-cell>Stock</fwb-table-head-cell>
                         <fwb-table-head-cell>Price</fwb-table-head-cell>
                         <fwb-table-head-cell>Category</fwb-table-head-cell>
@@ -178,7 +177,6 @@ const pageTo = (url) => {
                         >
                             <fwb-table-cell>{{ index + 1 }}</fwb-table-cell>
                             <fwb-table-cell>{{ product.name }}</fwb-table-cell>
-                            <fwb-table-cell>{{ product.image }}</fwb-table-cell>
                             <fwb-table-cell>{{ product.stock }}</fwb-table-cell>
                             <fwb-table-cell>{{ product.price }}</fwb-table-cell>
                             <fwb-table-cell>{{

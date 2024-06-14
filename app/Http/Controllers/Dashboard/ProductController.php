@@ -132,7 +132,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             // 'images' => 'required',
-            // 'images.*' => 'image|mimes:jpg, jpeg, png|max:2048',
+            'images.*' => 'image|mimes:jpg, jpeg, png|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -145,16 +145,16 @@ class ProductController extends Controller
                 'category_id' => $validated['category_id'],
             ]);
 
-            // if ($request->hasFile('images')) {
-            //     foreach ($request->file('images') as $file) {
-            //         $fileName = $file->getClientOriginalName();
-            //         $path = $file->storeAs('product', $fileName, 'public');
-            //         ProductImage::create([
-            //             'image' => $path,
-            //             'product_id' => $product->id,
-            //         ]);
-            //     }
-            // }
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $fileName = $file->getClientOriginalName();
+                    $path = $file->storeAs('product', $fileName, 'public');
+                    ProductImage::create([
+                        'image' => $path,
+                        'product_id' => $product->id,
+                    ]);
+                }
+            }
 
             DB::commit();
 

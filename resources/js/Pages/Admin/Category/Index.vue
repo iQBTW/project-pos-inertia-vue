@@ -21,6 +21,11 @@ const props = defineProps({
     categories: Object,
 });
 
+const formCategory = reactive({
+    id: null,
+    name: null,
+});
+
 const isEdit = ref(false);
 const showModal = ref(false);
 
@@ -42,11 +47,6 @@ watch(search, (value) => {
     emit("search", value);
 });
 
-//Delete
-const deleteCategory = (id) => {
-    router.delete('/dashboard/category/' + id)
-}
-
 // Pagination
 const pageTo = (url) => {
     router.get(url);
@@ -55,20 +55,19 @@ const pageTo = (url) => {
 const openCreateModal = () => {
     isEdit.value = false;
     showModal.value = true;
+
+    formCategory.name = null;
 }
 
 const openEditModal = (category, index) => {
-    console.log(category, index);
     isEdit.value = true;
     showModal.value = true;
 
     formCategory.name = category.name;
+    formCategory.id = category.id;
 };
 
-const formCategory = reactive({
-    name: null,
-});
-
+//Create
 const storeCategory = async () => {
     try {
         await router.post(route("category.store"), formCategory).then(() => {
@@ -80,16 +79,21 @@ const storeCategory = async () => {
     }
 }
 
-const updateCategory = async (id) => {
+//Edit
+const updateCategory = async () => {
     try {
-        await router.post(`/dashboard/category/${id}`, formCategory, {
-            _method: 'put',
-            // showModal.value = false,
-            // formCategory.name = null,
-        });
+        await router.put(`/dashboard/category/${formCategory.id}`, formCategory).then(() => {
+            showModal.value = false;
+            formProject.name = null;
+        })
     } catch (e){
         console.log(e);
     }
+}
+
+//Delete
+const deleteCategory = (id) => {
+    router.delete('/dashboard/category/' + id)
 }
 </script>
 

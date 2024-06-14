@@ -6,7 +6,6 @@ use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -45,10 +44,10 @@ class CategoryController extends Controller
         $category = Category::create($validated);
 
         if ($category) {
-            return redirect()->route('dashboard.category')->with('success', 'Category created successfully');
+            return redirect()->route('category.index')->with('success', 'Category created successfully');
         }
         else {
-            return redirect()->route('dashboard.category')->with('failed', 'Failed to create category');
+            return redirect()->route('category.index')->with('failed', 'Failed to create category');
         }
     }
 
@@ -71,9 +70,20 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|unique:categories,name'
+        ]);
+
+        $category->update($validated);
+
+        if ($category) {
+            return redirect()->route('category.index')->with('success', 'Category updated successfully');
+        }
+        else {
+            return redirect()->route('category.index')->with('failed', 'Failed to update category');
+        }
     }
 
     /**

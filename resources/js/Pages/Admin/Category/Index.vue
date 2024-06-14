@@ -20,6 +20,10 @@ import { ref, reactive, watch } from "vue";
 const props = defineProps({
     categories: Object,
 });
+
+const isEdit = ref(false);
+const showModal = ref(false);
+
 const emit = defineEmits(["search"]);
 
 // Searchbar
@@ -43,16 +47,44 @@ const pageTo = (url) => {
     router.get(url);
 };
 
-const showModal = ref(false);
+const openCreateModal = () => {
+    isEdit.value = false;
+    showModal.value = true;
+}
+
+const openEditModal = (category, index) => {
+    console.log(category, index);
+    isEdit.value = true;
+    showModal.value = true;
+
+    formCategory.name = category.name;
+};
 
 const formCategory = reactive({
     name: null,
 });
-function storeCategory() {
-    router.post("/dashboard/category", formCategory).then(() => {
-        showModal.value = false;
-        formProject.name = null;
-    });
+
+const storeCategory = async () => {
+    try {
+        await router.post(route("category.store"), formCategory).then(() => {
+            showModal.value = false;
+            formProject.name = null;
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+const updateCategory = async (id) => {
+    try {
+        await router.post(`/dashboard/category/${id}`, formCategory, {
+            _method: 'put',
+            // showModal.value = false,
+            // formCategory.name = null,
+        });
+    } catch (e){
+        console.log(e);
+    }
 }
 </script>
 
@@ -141,7 +173,7 @@ function storeCategory() {
                     >
                         <Button
                             label="show"
-                            @click="showModal = true"
+                            @click="openCreateModal"
                             severity="success"
                             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-black rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition-all ease-in 3s"
                         >
@@ -163,13 +195,13 @@ function storeCategory() {
                             class="bg-white"
                             v-model:visible="showModal"
                             modal
-                            header="Create Category"
+                            :header="isEdit ? 'Edit Category' : 'Create Category'"
                             :style="{ width: '25rem' }"
                         >
-                            <form @submit.prevent="storeCategory">
+                            <form @submit.prevent="isEdit ? updateCategory() : storeCategory()">
                                 <span
                                     class="text-surface-600 dark:text-surface-0/70 block mb-5"
-                                    >Create a new category.</span
+                                    >{{ isEdit ? 'Edit an existing Category' : 'Create a new Category' }}</span
                                 >
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="">
@@ -226,8 +258,9 @@ function storeCategory() {
                             <fwb-table-cell class="flex gap-2">
                                 <Button
                                     class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300"
+                                    @click="openEditModal(category, index)"
                                 >
-                                    <a href="#">Edit</a>
+                                    Edit
                                 </Button>
                                 <Button
                                     severity="danger"

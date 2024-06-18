@@ -52,6 +52,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     Route::prefix('transaction')->name('transaction.')->group(function () {
         Route::get('', [TransactionController::class, 'index'])->name('index');
+        Route::post('store', [TransactionController::class, 'store'])->name('store');
     });
 
     Route::prefix('category')->name('category.')->group(function () {

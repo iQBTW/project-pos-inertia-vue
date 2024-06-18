@@ -15,6 +15,7 @@ class TransactionController extends Controller
     public function index()
     {
         $products = Product::all();
+        $user = auth()->user();
 
         foreach ($products as $product) {
             $product->price = number_format($product->price, 0, '.', '');
@@ -22,6 +23,7 @@ class TransactionController extends Controller
 
         return Inertia::render('Admin/Transaction/Index', [
             'products' => $products,
+            'user' => $user
         ]);
 
     }
@@ -30,7 +32,7 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         $validated = $request->validate([
-            'invoice' => 'required',
+            // '*.invoice' => 'required',
             'user_id' => 'required|exists:users,id',
             'inputs.*.amount' => 'required|numeric',
             'inputs.*.product_id' => 'required|exists:products,id',
@@ -42,20 +44,21 @@ class TransactionController extends Controller
         try {
             foreach ($validated['inputs'] as $input) {
                 $product = Product::find($input['product_id']);
-                if (!$product) {
-                    throw new \Exception('Product not found.');
-                    if ($product->stock < $input['qty']) {
-                        return back()->with('error', 'Product ' . $product->name . ' is out of stock');
-                    }
-                }
+                // if (!$product) {
+                //     return back()->with('error', 'Product not found.');
+                // }
+                // else if ($product->stock < $input['qty']) {
+                //     return back()->with('error', 'Product ' . $product->name . ' is out of stock');
+
+                // }
 
                 $totalPrice = $product->price * $input['qty'];
 
                 $order = Order::create([
                     'invoice' => invoiceNumber(),
-                    'user_id' => $user->id,
                     'amount' => $input['amount'],
-                    'status' => $input['amount'] ? 0 : 1,
+                    'status' => 0,
+                    'user_id' => $user->id,
                 ]);
 
                 OrderDetail::create([
@@ -64,6 +67,10 @@ class TransactionController extends Controller
                     'qty' => $input['qty'],
                     'total' => $totalPrice,
                 ]);
+
+                // dd($orderD, $order, $product->stock -= $input['qty'], $product->id);
+                $product->stock -= $input['qty'];
+                $product->save();
             }
 
             DB::commit();

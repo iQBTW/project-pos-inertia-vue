@@ -7,5 +7,5 @@ function currencyFormat($value)
 
 function invoiceNumber()
 {
-    return 'INV-' . rand(1000, 9999) . time();
+    return 'INV-' . rand(1000, 9999);
 }

@@ -32,7 +32,6 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         $validated = $request->validate([
-            // '*.invoice' => 'required',
             'user_id' => 'required|exists:users,id',
             'inputs.*.amount' => 'required|numeric',
             'inputs.*.product_id' => 'required|exists:products,id',

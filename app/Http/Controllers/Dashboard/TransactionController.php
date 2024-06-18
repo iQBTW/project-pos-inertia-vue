@@ -43,13 +43,13 @@ class TransactionController extends Controller
         try {
             foreach ($validated['inputs'] as $input) {
                 $product = Product::find($input['product_id']);
-                // if (!$product) {
-                //     return back()->with('error', 'Product not found.');
-                // }
-                // else if ($product->stock < $input['qty']) {
-                //     return back()->with('error', 'Product ' . $product->name . ' is out of stock');
+                if (!$product) {
+                    return back()->with('error', 'Product not found.');
+                }
+                else if ($product->stock < $input['qty']) {
+                    return back()->with('error', 'Product ' . $product->name . ' is out of stock');
 
-                // }
+                }
 
                 $totalPrice = $product->price * $input['qty'];
 

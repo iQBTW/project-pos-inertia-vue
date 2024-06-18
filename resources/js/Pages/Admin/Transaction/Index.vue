@@ -17,6 +17,7 @@ const form = reactive([
         qty: 0,
         price: 0,
         amount: 0,
+        total: 0,
     },
 ]);
 
@@ -30,30 +31,30 @@ const updatePrice = (index) => {
         form[index].price = 0;
     }
 };
+const updateTotal = (index) => {
+    const selectedProduct = props.products.find(
+        (product) => product.id === form[index].product
+    );
+    if (selectedProduct) {
+        form[index].total = selectedProduct.price * form[index].qty;
+    } else {
+        form[index].total = 0;
+    }
+};
 
 watch(
-    () => form.map((item) => ({ product: item.product, qty: item.qty })),
+    () => form.map((item) => ({ product: item.product, qty: item.qty, total: item.total })),
     (newValues, oldValues) => {
         newValues.forEach((newValue, index) => {
             if (
                 newValue.product !== oldValues[index]?.product ||
-                newValue.qty !== oldValues[index]?.qty
+                newValue.qty !== oldValues[index]?.qty ||
+                newValue.total !== oldValues[index]?.total
             ) {
                 updatePrice(index);
+                updateTotal(index);
             }
         });
-    },
-    { deep: true }
-);
-
-watch(
-    form,
-    (newForm, oldForm) => {
-        // Check if a new item is added
-        if (newForm.length > oldForm.length) {
-            const index = newForm.length - 1; // Index of the newly added item
-            updateTotalPrice(index);
-        }
     },
     { deep: true }
 );
@@ -144,6 +145,17 @@ const storeOrder = () => {
                                 name="price"
                                 id="price"
                                 v-model="item.price"
+                                readonly
+                            />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="total">Total</label>
+                            <input
+                                class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                                type="number"
+                                name="total"
+                                id="total"
+                                v-model="item.total"
                                 readonly
                             />
                         </div>

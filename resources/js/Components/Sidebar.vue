@@ -332,7 +332,7 @@ const showSidebar = ref(true);
                                         />
                                     </svg>
                                 </template>
-                                <template #default>Shop</template>
+                                <template #default>Purchase Order</template>
                             </fwb-sidebar-item>
                         </Link>
                     </fwb-sidebar>

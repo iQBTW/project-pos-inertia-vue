@@ -1,10 +1,13 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { inject } from "vue";
 import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
+
+const Swal = inject('$swal')
 
 const props = defineProps({
     categories: Object,
@@ -17,6 +20,10 @@ const formProduct = useForm({
     category_id: null,
     images: [],
 });
+
+const handleImagePreview = () => {
+
+}
 
 const onFileChange = (e) => {
     formProduct.images = Array.from(e.target.files);
@@ -33,8 +40,27 @@ const storeProduct = () => {
     }
 
     router.post(route("product.store"), formData, {
-        onError: (errors) => {
-            console.log(errors);
+        onError: (error) => {
+            console.log(error);
+            Swal.fire({
+                toats: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        },
+        onSuccess: (success) => {
+            console.log(success);
+            Swal.fire({
+                toats: true,
+                icon: "success",
+                position: "top-end",
+                title: "Product Created Successfully",
+                showConfirmButton: false,
+                timer: 2000
+            })
         }
     });
 }

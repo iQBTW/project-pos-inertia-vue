@@ -1,5 +1,6 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { inject } from "vue";
 import { Head, router, Link } from "@inertiajs/vue3";
 import {
     FwbTable,
@@ -14,10 +15,22 @@ import Searchbar from "@/Components/Searchbar.vue";
 import Button from "primevue/button";
 import { ref, watch } from "vue";
 
+const Swal = inject('$swal')
+
 const props = defineProps({
     products: Object,
 });
 const emit = defineEmits(["search"]);
+
+// const showAlert = () => {
+//     Swal.fire({
+//         toast: true,
+//         icon: "success",
+//         position: "top-end",
+//         showConfirmButton: false,
+//         timer: 1500
+//     });
+// };
 
 //Searchbar
 const search = ref("");
@@ -37,13 +50,13 @@ watch(search, (value) => {
 
 //Edit
 const editProduct = (id) => {
-    router.get("/dashboard/product" + "/" + id + "/edit")
-}
+    router.get("/dashboard/product" + "/" + id + "/edit");
+};
 
 //Delete
 const deleteProduct = (id) => {
     router.delete("/dashboard/product/" + id);
-}
+};
 
 // Pagination
 const pageTo = (url) => {
@@ -93,7 +106,8 @@ const pageTo = (url) => {
                         <Link
                             :href="route('product.index')"
                             class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white"
-                            >Products</Link>
+                            >Products</Link
+                        >
                     </div>
                 </li>
                 <li>

@@ -43,7 +43,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
         Route::post('store', [ProductController::class, 'store'])->name('store');
         Route::put('{product}', [ProductController::class, 'update'])->name('update');
         Route::delete('{product}', [ProductController::class, 'destroy'])->name('destroy');
-        Route::get('{productImage}/image', [ProductImageController::class, 'destroy'])->name('destroyimage');
+        Route::delete('{productImage}/image', [ProductController::class, 'destroyImage'])->name('destroyimage');
     });
 
     Route::prefix('order')->name('order.')->group(function () {

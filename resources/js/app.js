@@ -10,6 +10,8 @@ import PrimeVue from 'primevue/config';
 import Lara from '../../public/assets/primevuepreset/lara';
 import DataTableLib from 'datatables.net-bs5'; ;
 import DataTable from 'datatables.net-vue3' ;
+import VueSweetAlert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 DataTable.use(DataTableLib);
 
@@ -22,6 +24,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(VueSweetAlert2)
             .component('DataTable', DataTable)
             .use(PrimeVue, {
                 unstyled: true,

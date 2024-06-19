@@ -1,13 +1,18 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { inject } from "vue";
 import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
+
+const Swal = inject('$swal')
 
 const props = defineProps({
     product: Object,
     categories: Object,
 });
+
+console.log(props.product.product_images);
 
 const formProduct = useForm({
     name: props.product.name || '',
@@ -22,14 +27,6 @@ const onFileChange = (e) => {
 };
 
 const updateProduct = (id) => {
-    // router.post("/dashboard/product/" + id, {
-    //     _method: "PUT",
-    //     name: formProduct.name,
-    //     stock: formProduct.stock,
-    //     price: formProduct.price,
-    //     category_id: formProduct.category_id,
-    //     image: formProduct.images,
-    // });
     const formData = new FormData();
     formData.append('name', formProduct.name);
     formData.append('stock', formProduct.stock);
@@ -52,12 +49,55 @@ const updateProduct = (id) => {
     {
         onError: (errors) => {
             console.log(errors);
+            Swal.fire({
+                toast: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000
+            })
         },
+        onSuccess: (success) => {
+            console.log(success);
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                position: "top-end",
+                title: "Product Updated Successfully",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
     });
 };
 
-const deleteImage = () => {
-    router.post(route("product.deleteImage"), formProduct["productImage"]);
+const deleteProductImage = (id) => {
+    router.delete(`/dashboard/product/${id}/image`, {
+        onSuccess: (success) => {
+            console.log(success);
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                position: "top-end",
+                title: "Product Image Deleted Successfully",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        },
+        onError: (errors) => {
+            console.log(errors);
+            Swal.fire({
+                toast: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+    });
+    // router.post(route("product.deleteImage"), formProduct["productImage"]);
 };
 </script>
 
@@ -205,48 +245,32 @@ const deleteImage = () => {
                         />
                     </div>
                     <div
-                        class="flex items-center gap-2 pt-2"
-                        v-for="(item, index) in product.product_images"
+                        class="flex items-center gap-2 pt-4"
+                        v-for="productImage in product.product_images"
+                        :key="productImage.id"
                     >
-                        <span>
-                            <svg
-                                class="w-6 h-6 text-gray-800 dark:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm.394 9.553a1 1 0 0 0-1.817.062l-2.5 6A1 1 0 0 0 8 19h8a1 1 0 0 0 .894-1.447l-2-4A1 1 0 0 0 13.2 13.4l-.53.706-1.276-2.553ZM13 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </span>
-                        <div class="">
-                            <p class="text-sm" :key="index">
-                                {{ item.image }}
-                            </p>
+                        <div class="flex border border-slate-500 shadow-md">
+                            <img class="w-24" :src="`/storage/${productImage.image}`" alt="" srcset="">
                         </div>
-                        <span
-                            ><svg
-                                class="w-6 h-6 text-gray-800 dark:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </span>
+                        <div class="absolute ml-20 mb-24 hover:cursor-pointer" @click="deleteProductImage(productImage.id)">
+                            <span
+                                ><svg
+                                    class="w-6 h-6 text-gray-800 dark:text-white hover:text-red-500 transition-all ease-in-out 5s"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                            </span>
+                        </div>
                     </div>
                     <div class="flex items-center ml-auto gap-3 pt-5">
                         <Button type="submit" severity="success">Submit</Button>

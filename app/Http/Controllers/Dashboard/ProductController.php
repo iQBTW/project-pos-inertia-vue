@@ -75,7 +75,7 @@ class ProductController extends Controller
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $imageFile) {
                     $fileName = time() . '_' . $imageFile->getClientOriginalName();
-                    $path = $imageFile->storeAs('product', $fileName, 'public');
+                    $path = $imageFile->storeAs('img/product', $fileName, 'public');
 
                     // Buat entri baru untuk setiap gambar
                     ProductImage::create([
@@ -177,10 +177,15 @@ class ProductController extends Controller
         return redirect(route('product.index'))->with('success', 'Product has been deleted succesfully');
     }
 
-    public function deleteImage($id)
+    public function destroyImage($id)
     {
-        ProductImage::where('id', $id)->delete();
+        $productImage = ProductImage::where('id', $id)->delete();
 
-        return redirect()->back()->with('success', 'Image has been deleted succesfully');
+        if ($productImage) {
+            return redirect()->back()->with('success', 'Image has been deleted succesfully');
+        }
+        else {
+            return redirect()->back() - with('error', 'Failed to delete image');
+        }
     }
 }

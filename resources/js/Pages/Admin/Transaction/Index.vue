@@ -43,7 +43,12 @@ const updateTotal = (index) => {
 };
 
 watch(
-    () => form.map((item) => ({ product: item.product, qty: item.qty, total: item.total })),
+    () =>
+        form.map((item) => ({
+            product: item.product,
+            qty: item.qty,
+            total: item.total,
+        })),
     (newValues, oldValues) => {
         newValues.forEach((newValue, index) => {
             if (
@@ -75,18 +80,18 @@ const removeRow = (index) => {
 };
 
 const storeOrder = () => {
-    const inputs = form.map(item => ({
+    const inputs = form.map((item) => ({
         product_id: item.product,
         qty: item.qty,
-        amount: item.amount
-    }))
+        amount: item.amount,
+    }));
 
     console.log(inputs);
 
     router.post(route("transaction.store"), {
         user_id: props.user.id,
-        inputs: inputs
-    })
+        inputs: inputs,
+    });
 };
 </script>
 
@@ -175,20 +180,18 @@ const storeOrder = () => {
                         >
                             <button class="" @click="removeRow(index)">
                                 <svg
-                                    class="text-gray-800 dark:text-white"
+                                    class="w-6 h-6 text-slate-200 dark:text-white"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
                                     height="24"
-                                    fill="none"
+                                    fill="currentColor"
                                     viewBox="0 0 24 24"
                                 >
                                     <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M5 12h14m-7 7V5"
+                                        fill-rule="evenodd"
+                                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                        clip-rule="evenodd"
                                     />
                                 </svg>
                             </button>

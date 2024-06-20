@@ -1,5 +1,6 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { inject } from "vue";
 import { Head, router, Link } from "@inertiajs/vue3";
 import {
     FwbA,
@@ -16,6 +17,8 @@ import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { ref, reactive, watch } from "vue";
+
+const Swal = inject('$swal')
 
 const props = defineProps({
     categories: Object,
@@ -52,6 +55,7 @@ const pageTo = (url) => {
     router.get(url);
 };
 
+//Create Modal
 const openCreateModal = () => {
     isEdit.value = false;
     showModal.value = true;
@@ -59,6 +63,7 @@ const openCreateModal = () => {
     formCategory.name = null;
 }
 
+//Edit Modal
 const openEditModal = (category, index) => {
     isEdit.value = true;
     showModal.value = true;
@@ -68,11 +73,32 @@ const openEditModal = (category, index) => {
 };
 
 //Create
-const storeCategory = async () => {
+const storeCategory = () => {
     try {
-        await router.post(route("category.store"), formCategory).then(() => {
-            showModal.value = false;
-            formProject.name = null;
+        router.post(route("category.store"), formCategory, {
+            onSuccess: () => {
+                Swal.fire({
+                    toast: true,
+                    icon: "success",
+                    position: "top-end",
+                    title: "Category Created Successfully",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+                showModal.value = false;
+                formCategory.name = null;
+            },
+            onError: (errors) => {
+                console.log(errors);
+                Swal.fire({
+                    toast: true,
+                    icon: "error",
+                    position: "top-end",
+                    title: "There was an error",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            }
         });
     } catch (e) {
         console.log(e);
@@ -82,9 +108,30 @@ const storeCategory = async () => {
 //Edit
 const updateCategory = async () => {
     try {
-        await router.put(`/dashboard/category/${formCategory.id}`, formCategory).then(() => {
-            showModal.value = false;
-            formProject.name = null;
+        router.put(`/dashboard/category/${formCategory.id}`, formCategory, {
+            onSuccess: () => {
+                Swal.fire({
+                    toast: true,
+                    icon: "success",
+                    position: "top-end",
+                    title: "Category Updated Successfully",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+                showModal.value = false;
+                formCategory.name = null;
+            },
+            onError: (errors) => {
+                console.log(errors);
+                Swal.fire({
+                    toast: true,
+                    icon: "error",
+                    position: "top-end",
+                    title: "There was an error",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            }
         })
     } catch (e){
         console.log(e);
@@ -93,7 +140,29 @@ const updateCategory = async () => {
 
 //Delete
 const deleteCategory = (id) => {
-    router.delete('/dashboard/category/' + id)
+    router.delete('/dashboard/category/' + id, {
+        onSuccess: () => {
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                position: "top-end",
+                title: "Category Deleted Successfully",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        },
+        onError: (errors) => {
+            console.log(errors);
+            Swal.fire({
+                toast: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+    })
 }
 </script>
 

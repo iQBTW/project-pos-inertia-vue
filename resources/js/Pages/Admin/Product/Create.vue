@@ -137,7 +137,7 @@ const storeProduct = () => {
         </Breadcrumb>
 
         <!-- Content Section -->
-        <div class="p-4 bg-white w-1/2 rounded mt-5 mb-5 mx-auto">
+        <div class="p-4 bg-white w-1/2 rounded-lg shadow-md mt-5 mb-5 mx-auto">
             <form @submit.prevent="storeProduct">
                 <div class="flex flex-col items-center">
                     <div class="py-2">

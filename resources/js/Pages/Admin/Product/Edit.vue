@@ -5,7 +5,7 @@ import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
 
-const Swal = inject('$swal')
+const Swal = inject("$swal");
 
 const props = defineProps({
     product: Object,
@@ -15,10 +15,10 @@ const props = defineProps({
 console.log(props.product.product_images);
 
 const formProduct = useForm({
-    name: props.product.name || '',
+    name: props.product.name || "",
     stock: props.product.stock || 0,
     price: props.product.price || 0,
-    category_id: props.product.category_id || '',
+    category_id: props.product.category_id || "",
     images: [],
 });
 
@@ -28,25 +28,24 @@ const onFileChange = (e) => {
 
 const updateProduct = (id) => {
     const formData = new FormData();
-    formData.append('name', formProduct.name);
-    formData.append('stock', formProduct.stock);
-    formData.append('price', formProduct.price);
-    formData.append('category_id', formProduct.category_id);
-    formData.append('_method', 'PUT');
+    formData.append("name", formProduct.name);
+    formData.append("stock", formProduct.stock);
+    formData.append("price", formProduct.price);
+    formData.append("category_id", formProduct.category_id);
+    formData.append("_method", "PUT");
     for (let i = 0; i < formProduct.images.length; i++) {
-        formData.append('images[]', formProduct.images[i]);
+        formData.append("images[]", formProduct.images[i]);
     }
 
-    console.log('FormData:', {
+    console.log("FormData:", {
         name: formProduct.name,
         stock: formProduct.stock,
         price: formProduct.price,
         category_id: formProduct.category_id,
-        images: formProduct.images
+        images: formProduct.images,
     });
 
-    router.post(`/dashboard/product/${id}`, formData,
-    {
+    router.post(`/dashboard/product/${id}`, formData, {
         onError: (errors) => {
             console.log(errors);
             Swal.fire({
@@ -55,8 +54,8 @@ const updateProduct = (id) => {
                 position: "top-end",
                 title: "There was an error",
                 showConfirmButton: false,
-                timer: 2000
-            })
+                timer: 2000,
+            });
         },
         onSuccess: (success) => {
             console.log(success);
@@ -66,9 +65,9 @@ const updateProduct = (id) => {
                 position: "top-end",
                 title: "Product Updated Successfully",
                 showConfirmButton: false,
-                timer: 2000
-            })
-        }
+                timer: 2000,
+            });
+        },
     });
 };
 
@@ -82,8 +81,8 @@ const deleteProductImage = (id) => {
                 position: "top-end",
                 title: "Product Image Deleted Successfully",
                 showConfirmButton: false,
-                timer: 2000
-            })
+                timer: 2000,
+            });
         },
         onError: (errors) => {
             console.log(errors);
@@ -93,9 +92,9 @@ const deleteProductImage = (id) => {
                 position: "top-end",
                 title: "There was an error",
                 showConfirmButton: false,
-                timer: 2000
-            })
-        }
+                timer: 2000,
+            });
+        },
     });
     // router.post(route("product.deleteImage"), formProduct["productImage"]);
 };
@@ -172,7 +171,7 @@ const deleteProductImage = (id) => {
         </Breadcrumb>
 
         <!-- Content Section -->
-        <div class="p-4 bg-white w-[600px] rounded mt-5 mb-5 mx-auto">
+        <div class="p-4 bg-white w-[600px] rounded-lg shadow-md mt-5 mb-5 mx-auto">
             <form @submit.prevent="updateProduct(product.id)">
                 <div class="flex flex-col items-center">
                     <div class="py-2">
@@ -244,32 +243,42 @@ const deleteProductImage = (id) => {
                             multiple
                         />
                     </div>
-                    <div
-                        class="flex items-center gap-2 pt-4"
-                        v-for="productImage in product.product_images"
-                        :key="productImage.id"
-                    >
-                        <div class="flex border border-slate-500 shadow-md">
-                            <img class="w-24" :src="`/storage/${productImage.image}`" alt="" srcset="">
-                        </div>
-                        <div class="absolute ml-20 mb-24 hover:cursor-pointer" @click="deleteProductImage(productImage.id)">
-                            <span
-                                ><svg
-                                    class="w-6 h-6 text-gray-800 dark:text-white hover:text-red-500 transition-all ease-in-out 5s"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                            </span>
+                    <div class="flex mt-4 gap-2 w-fit">
+                        <div
+                            class="flex items-center gap-2"
+                            v-for="productImage in product.product_images"
+                            :key="productImage.id"
+                        >
+                            <div class="w-24 h-24">
+                                <img
+                                    class="flex w-24 h-24"
+                                    :src="`/storage/${productImage.image}`"
+                                    alt=""
+                                    srcset=""
+                                />
+                            </div>
+                            <div
+                                class="absolute ml-20 mb-24 hover:cursor-pointer"
+                                @click="deleteProductImage(productImage.id)"
+                            >
+                                <span
+                                    ><svg
+                                        class="w-5 h-5 rounded-full bg-red-500 text-gray-800 dark:text-white hover:text-white transition-all ease-in-out 5s"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="flex items-center ml-auto gap-3 pt-5">

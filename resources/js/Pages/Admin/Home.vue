@@ -11,11 +11,13 @@ import {
     CategoryScale,
     LinearScale,
 } from "chart.js";
-import { computed } from "vue";
 
 const props = defineProps({
     orderByCategory: Array,
     categories: Array,
+    orderTotal: Number,
+    productTotal: Number,
+    userTotal: Number,
 });
 
 ChartJS.register(
@@ -27,35 +29,154 @@ ChartJS.register(
     LinearScale
 );
 
-const chartOptions = {
-    responsive: true,
+const randomColor = () => {
+    let letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 };
 
-const chartData = {
-    labels: props.orderByCategory.map(item => item.category), // Mengambil nama kategori dari props.categories sebagai labels
-    datasets: props.categories.map(category => ({
-        label: category.name, // Menggunakan nama kategori sebagai label dataset
+const chartOrderData = {
+    labels: ["Total Orders"],
+    datasets: props.categories.map((category) => ({
+        label: category.name,
         data: props.orderByCategory
-            .filter(item => item.category === category.name) // Filter data orderByCategory sesuai dengan kategori saat ini
-            .map(item => item.order_count), // Ambil order_count dari data yang telah difilter
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
+            .filter((item) => item.category == category.name)
+            .map((item) => item.order_count),
+        backgroundColor: randomColor(),
+        borderColor: "rgba(1, 1, 1, 1)",
     })),
 };
 
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+};
 </script>
 
 <template>
     <Head title="Dashboard" />
 
     <AdminLayout>
-        <div class="pt-2 px-2 flex flex-auto">
-            <div class="bg-white rounded-md shadow-md">
-                <Bar
-                    id="orderByCategory"
-                    :data="chartData"
-                    :options="chartOptions"
-                />
+        <div class="my-2 mx-2">
+            <div class="grid grid-cols-3 gap-20 my-6">
+                <div
+                    class="bg-white rounded-lg border border-slate-800 px-10 py-8"
+                >
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2
+                                class="text-xl font-semibold text-slate-600 pb-2"
+                            >
+                                Total Orders
+                            </h2>
+                            <span class="text-3xl font-semibold">{{
+                                orderTotal
+                            }}</span>
+                        </div>
+                        <svg
+                        class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
+
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div
+                    class="bg-white rounded-lg border border-slate-800 px-10 py-8"
+                >
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2
+                                class="text-xl font-semibold text-slate-600 pb-2"
+                            >
+                                Total Orders
+                            </h2>
+                            <span class="text-3xl font-semibold">{{
+                                orderTotal
+                            }}</span>
+                        </div>
+                        <svg
+                        class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
+
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div
+                    class="bg-white rounded-lg border border-slate-800 px-10 py-8"
+                >
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2
+                                class="text-xl font-semibold text-slate-600 pb-2"
+                            >
+                                Total Orders
+                            </h2>
+                            <span class="text-3xl font-semibold">{{
+                                orderTotal
+                            }}</span>
+                        </div>
+                        <svg
+                        class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
+
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="my-4">
+                <div class="bg-white rounded-lg border border-slate-800 shadow-md w-[600px]">
+                    <div class="px-5 pt-5 pb-2 font-bold">
+                        <h2>Total Orders by Product Category</h2>
+                    </div>
+                    <Bar
+                        class="px-5"
+                        id="orderByCategory"
+                        :data="chartOrderData"
+                        :options="chartOptions"
+                    />
+                </div>
             </div>
         </div>
     </AdminLayout>

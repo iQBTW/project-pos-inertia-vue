@@ -16,7 +16,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $orderTotal = Order::count();
+        $productTotal = Product::count();
+        $userTotal = User::count();
         $categories = Category::get();
+
+        $bestSellingProduct = OrderDetail::select(
+            'products.id as product_id',
+            'products.name as product',
+            'product_images.image as image',
+            DB::raw('COUNT(order_details.id) as order_count')
+        )
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
+            ->groupBy('products.id', 'products.name', 'product_images.image')
+            ->orderBy('order_count', 'desc')
+            ->get();
+
         $orderByCategory = OrderDetail::select(
             'categories.id as category_id',
             'categories.name as category',
@@ -30,13 +46,11 @@ class DashboardController extends Controller
 
         return Inertia::render('Admin/Home', [
             'orderByCategory' => $orderByCategory,
+            'bestSellingProduct' => $bestSellingProduct,
             'categories' => $categories,
+            'orderTotal' => $orderTotal,
+            'productTotal' => $productTotal,
+            'userTotal' => $userTotal
         ]);
-    }
-
-    public function users()
-    {
-        $users = User::all();
-        return Inertia::render('Admin/User/Index', ['users' => $users]);
     }
 }

@@ -3,12 +3,14 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\ProductImageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -33,6 +35,8 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('', [UserController::class, 'index'])->name('index');
+        Route::post('store', [UserController::class, 'store'])->name('store');
+        Route::put('{user}', [UserController::class, 'update'])->name('update');
         Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
     });
 
@@ -60,6 +64,20 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
         Route::post('store', [CategoryController::class, 'store'])->name('store');
         Route::put('{category}', [CategoryController::class, 'update'])->name('update');
         Route::delete('{category}', [CategoryController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('role')->name('role.')->group(function () {
+        Route::get('', [RoleController::class, 'index'])->name('index');
+        Route::post('store', [RoleController::class, 'store'])->name('store');
+        Route::put('{role}', [RoleController::class, 'update'])->name('update');
+        Route::delete('{role}', [RoleController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('permission')->name('permission.')->group(function () {
+        Route::get('', [PermissionController::class, 'index'])->name('index');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::put('{permission}', [PermissionController::class, 'update'])->name('update');
+        Route::delete('{permission}', [PermissionController::class, 'destroy'])->name('destroy');
     });
 });
 

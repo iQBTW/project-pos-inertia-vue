@@ -24,10 +24,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            // 'name' => fake()->name(),
-            'name' => 'Admin',
-            // 'email' => lcfirst(fake()->unique()->firstName() . '@gmail.com'),
-            'email' => 'admin@gmail.com',
+            'name' => fake()->name(),
+            'email' => lcfirst(fake()->unique()->firstName() . '@gmail.com'),
             'email_verified_at' => now(),
             'password' => Hash::make('123qwerty'),
             'address' => fake()->address(),

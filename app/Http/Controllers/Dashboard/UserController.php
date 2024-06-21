@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
-use Inertia\Inertia;
 use App\Models\User;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,37 +28,30 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // return Inertia::render('Admin/User/Create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // $validated = $request->validate([
-        //     'name' => 'required',
-        // ]);
-    }
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users, email',
+            'password' => 'required|string|min:8|confirmed',
+            'address' => 'required|string|max:255',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'address' => $validated['address'],
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
+        if ($user) {
+            return redirect()->route('user.index')->with('success', 'User created successfully');
+        }
+        else {
+            return redirect()->route('user.index')->with('error', 'There has been an error');
+        }
     }
 
     /**
@@ -65,7 +59,26 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users, email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'address' => 'required|string|max:255',
+        ]);
+
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'address' => $validated['address'],
+        ]);
+
+        if ($user) {
+            return redirect()->route('user.index')->with('success', 'User updated successfully');
+        }
+        else {
+            return redirect()->route('user.index')->with('error', 'Failed to update user');
+        }
     }
 
     /**
@@ -75,6 +88,11 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect(route('user.index'))->with('success', 'User has been deleted succesfully');
+        if ($user) {
+            return redirect(route('user.index'))->with('success', 'User has been deleted succesfully');
+        }
+        else {
+            return redirect(route('user.index'))->with('error', 'Failed to delete user');
+        }
     }
 }

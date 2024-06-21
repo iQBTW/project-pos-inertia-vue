@@ -185,7 +185,7 @@ class ProductController extends Controller
             return redirect()->back()->with('success', 'Image has been deleted succesfully');
         }
         else {
-            return redirect()->back() - with('error', 'Failed to delete image');
+            return redirect()->back()->with('error', 'Failed to delete image');
         }
     }
 }

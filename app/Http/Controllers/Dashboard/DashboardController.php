@@ -21,9 +21,10 @@ class DashboardController extends Controller
         $userTotal = User::count();
         $categories = Category::get();
 
-        $bestSellingProduct = OrderDetail::select(
+        $bestSellingProducts = OrderDetail::select(
             'products.id as product_id',
             'products.name as product',
+            'products.price as price',
             'product_images.image as image',
             DB::raw('COUNT(order_details.id) as order_count')
         )
@@ -46,7 +47,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Admin/Home', [
             'orderByCategory' => $orderByCategory,
-            'bestSellingProduct' => $bestSellingProduct,
+            'bestSellingProducts' => $bestSellingProducts,
             'categories' => $categories,
             'orderTotal' => $orderTotal,
             'productTotal' => $productTotal,

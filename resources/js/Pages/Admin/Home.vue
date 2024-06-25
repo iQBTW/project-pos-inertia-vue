@@ -18,7 +18,10 @@ const props = defineProps({
     orderTotal: Number,
     productTotal: Number,
     userTotal: Number,
+    bestSellingProducts: Object,
 });
+
+console.log(props.bestSellingProducts);
 
 ChartJS.register(
     Title,
@@ -77,8 +80,7 @@ const chartOptions = {
                             }}</span>
                         </div>
                         <svg
-                        class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
-
+                            class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -111,8 +113,7 @@ const chartOptions = {
                             }}</span>
                         </div>
                         <svg
-                        class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
-
+                            class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -145,8 +146,7 @@ const chartOptions = {
                             }}</span>
                         </div>
                         <svg
-                        class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
-
+                            class="w-10 h-10 text-primary-700 px-1 bg-slate-200 rounded-lg hover:bg-primary-active-color hover:text-white transition-all ease-in 3s dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -165,17 +165,82 @@ const chartOptions = {
                     </div>
                 </div>
             </div>
-            <div class="my-4">
-                <div class="bg-white rounded-lg border border-slate-800 shadow-md w-[600px]">
-                    <div class="px-5 pt-5 pb-2 font-bold">
-                        <h2>Total Orders by Product Category</h2>
+            <div class="flex justify-center gap-2">
+                <div class="my-4">
+                    <div
+                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[600px] md:w-[500px]"
+                    >
+                        <div class="px-5 pt-5 pb-2 font-bold">
+                            <h2>Total Orders by Product Category</h2>
+                        </div>
+                        <Bar
+                            class="px-5"
+                            id="orderByCategory"
+                            :data="chartOrderData"
+                            :options="chartOptions"
+                        />
                     </div>
-                    <Bar
-                        class="px-5"
-                        id="orderByCategory"
-                        :data="chartOrderData"
-                        :options="chartOptions"
-                    />
+                </div>
+                <div class="my-4">
+                    <div
+                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[600px] md:w-[500px]"
+                    >
+                        <div class="px-5 pt-5 pb-2 font-bold">
+                            <h2>Best Selling Products</h2>
+                        </div>
+                        <div class="px-5">
+                            <div
+                                class="flex justify-evenly pb-2"
+                                v-for="(
+                                    product, index
+                                ) in bestSellingProducts"
+                                :key="index"
+                            >
+                                <div class="">
+                                    <img
+                                        class="block w-[100px]"
+                                        :src="`/storage/${product.image}`"
+                                        alt=""
+                                        srcset=""
+                                    />
+                                </div>
+                                <div class="">
+                                    <h2 class="font-bold">{{ product.product }}</h2>
+                                    <p>Rp. {{ product.price }}-</p>
+                                </div>
+                                <div class="">
+                                    <h2 class="font-bold">Total Orders</h2>
+                                    <p class="text-center">{{ product.order_count }}</p>
+                                </div>
+                            </div>
+                            <!-- <div class="flex justify-evenly">
+                                <div class="">
+                                    <img class="block w-[100px]" src="../../../../public/assets/img/Rectangle 9.png" alt="" srcset="">
+                                </div>
+                                <div class="">
+                                    <h2 class="font-bold">Kemeja Formal</h2>
+                                    <p>Rp. 200.000-</p>
+                                </div>
+                                <div class="">
+                                    <h2 class="font-bold">Total Orders</h2>
+                                    <p class="text-center">51</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-evenly pb-2">
+                                <div class="">
+                                    <img class="block w-[100px]" src="../../../../public/assets/img/Rectangle 9.png" alt="" srcset="">
+                                </div>
+                                <div class="">
+                                    <h2 class="font-bold">Kemeja Formal</h2>
+                                    <p>Rp. 200.000-</p>
+                                </div>
+                                <div class="">
+                                    <h2 class="font-bold">Total Orders</h2>
+                                    <p class="text-center">51</p>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

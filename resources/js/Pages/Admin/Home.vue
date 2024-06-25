@@ -216,32 +216,6 @@ const chartOptions = {
                                     </p>
                                 </div>
                             </div>
-                            <!-- <div class="flex justify-evenly">
-                                <div class="">
-                                    <img class="block w-[100px]" src="../../../../public/assets/img/Rectangle 9.png" alt="" srcset="">
-                                </div>
-                                <div class="">
-                                    <h2 class="font-bold">Kemeja Formal</h2>
-                                    <p>Rp. 200.000-</p>
-                                </div>
-                                <div class="">
-                                    <h2 class="font-bold">Total Orders</h2>
-                                    <p class="text-center">51</p>
-                                </div>
-                            </div>
-                            <div class="flex justify-evenly pb-2">
-                                <div class="">
-                                    <img class="block w-[100px]" src="../../../../public/assets/img/Rectangle 9.png" alt="" srcset="">
-                                </div>
-                                <div class="">
-                                    <h2 class="font-bold">Kemeja Formal</h2>
-                                    <p>Rp. 200.000-</p>
-                                </div>
-                                <div class="">
-                                    <h2 class="font-bold">Total Orders</h2>
-                                    <p class="text-center">51</p>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>

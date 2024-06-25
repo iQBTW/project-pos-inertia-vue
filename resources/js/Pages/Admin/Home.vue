@@ -189,10 +189,13 @@ const chartOptions = {
                         </div>
                         <div class="px-5">
                             <div
-                                class="flex justify-evenly pb-2"
+                                class="flex items-center justify-evenly pb-2"
                                 v-for="(product, index) in bestSellingProducts"
                                 :key="index"
                             >
+                                <div class="font-bold">
+                                    <p>{{ index + 1 }}.</p>
+                                </div>
                                 <div class="">
                                     <img
                                         class="block w-[100px]"

@@ -93,7 +93,7 @@ const chartOptions = {
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z"
+                                d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"
                             />
                         </svg>
                     </div>
@@ -106,10 +106,10 @@ const chartOptions = {
                             <h2
                                 class="text-xl font-semibold text-slate-600 pb-2"
                             >
-                                Total Orders
+                                Total Products
                             </h2>
                             <span class="text-3xl font-semibold">{{
-                                orderTotal
+                                productTotal
                             }}</span>
                         </div>
                         <svg
@@ -139,10 +139,10 @@ const chartOptions = {
                             <h2
                                 class="text-xl font-semibold text-slate-600 pb-2"
                             >
-                                Total Orders
+                                Total Users
                             </h2>
                             <span class="text-3xl font-semibold">{{
-                                orderTotal
+                                userTotal
                             }}</span>
                         </div>
                         <svg
@@ -157,9 +157,8 @@ const chartOptions = {
                             <path
                                 stroke="currentColor"
                                 stroke-linecap="round"
-                                stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z"
+                                d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
                             />
                         </svg>
                     </div>
@@ -191,9 +190,7 @@ const chartOptions = {
                         <div class="px-5">
                             <div
                                 class="flex justify-evenly pb-2"
-                                v-for="(
-                                    product, index
-                                ) in bestSellingProducts"
+                                v-for="(product, index) in bestSellingProducts"
                                 :key="index"
                             >
                                 <div class="">
@@ -204,12 +201,16 @@ const chartOptions = {
                                     />
                                 </div>
                                 <div class="">
-                                    <h2 class="font-bold">{{ product.product }}</h2>
+                                    <h2 class="font-bold">
+                                        {{ product.product }}
+                                    </h2>
                                     <p>Rp. {{ product.price }}-</p>
                                 </div>
                                 <div class="">
                                     <h2 class="font-bold">Total Orders</h2>
-                                    <p class="text-center">{{ product.order_count }}</p>
+                                    <p class="text-center">
+                                        {{ product.order_count }}
+                                    </p>
                                 </div>
                             </div>
                             <!-- <div class="flex justify-evenly">

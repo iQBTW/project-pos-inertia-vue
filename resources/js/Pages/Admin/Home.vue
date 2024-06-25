@@ -200,8 +200,7 @@ const chartOptions = {
                                     <img
                                         class="block w-[100px]"
                                         :src="`/storage/${product.image}`"
-                                        alt=""
-                                        srcset=""
+                                        alt="product-image"
                                     />
                                 </div>
                                 <div class="">

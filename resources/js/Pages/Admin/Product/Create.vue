@@ -4,8 +4,6 @@ import { inject } from "vue";
 import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
 
 const Swal = inject('$swal')
 
@@ -40,8 +38,7 @@ const storeProduct = () => {
     }
 
     router.post(route("product.store"), formData, {
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
             Swal.fire({
                 toats: true,
                 icon: "error",
@@ -51,8 +48,7 @@ const storeProduct = () => {
                 timer: 2000
             })
         },
-        onSuccess: (success) => {
-            console.log(success);
+        onSuccess: () => {
             Swal.fire({
                 toats: true,
                 icon: "success",

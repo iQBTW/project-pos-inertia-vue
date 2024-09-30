@@ -43,35 +43,30 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOrderRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
+    public function edit($id)
     {
-        //
+        $order = Order::select(
+            'orders.*',
+            'users.id as user_id',
+            'users.name as user',
+            'products.id as product_id',
+            'products.name as product',
+            'order_details.id as order_detail_id',
+            'order_details.qty as qty',
+            'order_details.total as total'
+        )
+            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->findOrFail($id);
+
+        $order->status = statusToString($order->status);
+
+        return Inertia::render('Admin/Order/Edit', [
+            'order' => $order
+        ]);
     }
 
     /**

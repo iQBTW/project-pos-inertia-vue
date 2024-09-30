@@ -43,6 +43,10 @@ const pageTo = (url) => {
     router.get(url);
 };
 
+const editOrder = (id) => {
+    router.get("/dashboard/order" + "/" + id + "/edit");
+};
+
 const showModal = ref(false);
 </script>
 
@@ -166,7 +170,8 @@ const showModal = ref(false);
                                 <Button
                                     class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300"
                                 >
-                                    <a href="#">Edit</a>
+
+                                    <a @click.prevent="editOrder(order.id)">Edit</a>
                                 </Button>
                                 <Button
                                     severity="danger"

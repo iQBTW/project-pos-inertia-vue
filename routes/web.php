@@ -12,7 +12,6 @@ use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\TransactionController;
-use App\Http\Controllers\Dashboard\ProductImageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Route::get('/', function () {
@@ -53,7 +52,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
     Route::prefix('order')->name('order.')->group(function () {
         Route::get('', [OrderController::class, 'index'])->name('index');
         Route::get('{order}/edit', [OrderController::class, 'edit'])->name('edit');
-
+        Route::put('{order}', [OrderController::class, 'update'])->name('update');
     });
 
     Route::prefix('transaction')->name('transaction.')->group(function () {

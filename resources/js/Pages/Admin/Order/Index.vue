@@ -2,7 +2,6 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head, router, Link } from "@inertiajs/vue3";
 import {
-    FwbA,
     FwbTable,
     FwbTableBody,
     FwbTableCell,
@@ -12,10 +11,8 @@ import {
 } from "flowbite-vue";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Searchbar from "@/Components/Searchbar.vue";
-import Dialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import { ref, reactive, watch } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps({
     orders: Object,
@@ -46,8 +43,6 @@ const pageTo = (url) => {
 const editOrder = (id) => {
     router.get("/dashboard/order" + "/" + id + "/edit");
 };
-
-const showModal = ref(false);
 </script>
 
 <template>

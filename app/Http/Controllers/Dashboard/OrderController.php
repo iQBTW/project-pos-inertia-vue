@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use DB;
 use Inertia\Inertia;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -72,9 +73,53 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(Request $request, $id)
     {
-        //
+        $order = Order::select(
+            'orders.*',
+            'users.id as user_id',
+            'users.name as user',
+            'products.id as product_id',
+            'products.name as product',
+            'order_details.id as order_detail_id',
+            'order_details.qty as qty',
+            'order_details.total as total'
+        )
+            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->findOrFail($id);
+
+        $validated = $request->validate([
+            'amount' => 'numeric',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            if ($validated['amount'] < $order->total) {
+                $order->update([
+                    'amount' => $order->amount,
+                    'status' => $order->status,
+                ]);
+
+                return redirect()->route('order.edit', $id)->with('error', 'Amount must be greater than total');
+            }
+
+            $order->update([
+                'amount' => $validated['amount'],
+                'status' => 1,
+            ]);
+
+            DB::commit();
+            return redirect()->route('order.edit', $id)->with('success', 'Order has been updated succesfully');
+        }
+        catch (\Throwable $e) {
+            DB::rollback();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**

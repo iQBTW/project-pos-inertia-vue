@@ -5,6 +5,7 @@ import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
 
+
 const Swal = inject("$swal");
 
 const props = defineProps({
@@ -28,14 +29,14 @@ const formOrder = useForm({
 
 const updateOrder = (id) => {
     const formData = new FormData();
-    formData.append("invoice", formOrder.invoice);
-    formData.append("product_id", formOrder.product_id);
+    // formData.append("invoice", formOrder.invoice);
+    // formData.append("product_id", formOrder.product_id);
     formData.append("amount", formOrder.amount);
-    formData.append("status", formOrder.status);
-    formData.append("qty", formOrder.qty);
-    formData.append("total", formOrder.total);
-    formData.append("user_id", formOrder.user_id);
-    formData.append("order_detail_id", formOrder.order_detail_id);
+    // formData.append("status", formOrder.status);
+    // formData.append("qty", formOrder.qty);
+    // formData.append("total", formOrder.total);
+    // formData.append("user_id", formOrder.user_id);
+    // formData.append("order_detail_id", formOrder.order_detail_id);
     formData.append("_method", "PUT");
 
     console.log("FormData:", {
@@ -50,13 +51,13 @@ const updateOrder = (id) => {
     });
 
     router.post(`/dashboard/order/${id}`, formData, {
-        onError: (err) => {
-            console.log(err);
+        onError: (error) => {
+            console.log(error);
             Swal.fire({
                 toast: true,
                 icon: "error",
                 position: "top-end",
-                title: "There was an error",
+                title: 'Something went wrong',
                 showConfirmButton: false,
                 timer: 2000,
             });
@@ -67,7 +68,7 @@ const updateOrder = (id) => {
                 toast: true,
                 icon: "success",
                 position: "top-end",
-                title: "Product Updated Successfully",
+                title: 'Order has been updated',
                 showConfirmButton: false,
                 timer: 2000,
             });
@@ -148,7 +149,7 @@ const updateOrder = (id) => {
 
         <!-- Content Section -->
         <div class="p-4 bg-white w-[600px] rounded-lg shadow-md mt-5 mb-5 mx-auto">
-            <form @submit.prevent="updateProduct(product.id)">
+            <form @submit.prevent="updateOrder(order.id)">
                 <div class="flex flex-col items-center">
                     <div class="py-2">
                         <div class="py-2">
@@ -160,6 +161,7 @@ const updateOrder = (id) => {
                             id="invoice"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             v-model="formOrder.invoice"
+                            disabled
                         />
                     </div>
                     <div class="">
@@ -172,6 +174,7 @@ const updateOrder = (id) => {
                             id="status"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             v-model="formOrder.status"
+                            disabled
                         />
                     </div>
                     <div class="">
@@ -184,6 +187,7 @@ const updateOrder = (id) => {
                             name="product"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             v-model="formOrder.product"
+                            disabled
                         />
                     </div>
                     <div class="">
@@ -196,6 +200,7 @@ const updateOrder = (id) => {
                             name="qty"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             v-model="formOrder.qty"
+                            disabled
                             />
                         </div>
                     <div class="">
@@ -208,6 +213,7 @@ const updateOrder = (id) => {
                             name="user"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             v-model="formOrder.user"
+                            disabled
                         />
                     </div>
                     <div class="">
@@ -220,6 +226,7 @@ const updateOrder = (id) => {
                             name="total"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             v-model="formOrder.total"
+                            disabled
                         />
                     </div>
                     <div class="">
@@ -230,7 +237,7 @@ const updateOrder = (id) => {
                             type="number"
                             name="amount"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            id=""
+                            id="amount"
                             v-model="formOrder.amount"
                         />
                     </div>

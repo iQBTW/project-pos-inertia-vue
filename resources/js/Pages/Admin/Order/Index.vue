@@ -12,11 +12,14 @@ import {
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Searchbar from "@/Components/Searchbar.vue";
 import Button from "primevue/button";
-import { ref, watch } from "vue";
+import { ref, watch, inject } from "vue";
 
 const props = defineProps({
     orders: Object,
 });
+
+const Swal = inject("$swal");
+
 const emit = defineEmits(["search"]);
 
 // Searchbar
@@ -40,8 +43,37 @@ const pageTo = (url) => {
     router.get(url);
 };
 
+// Edit
 const editOrder = (id) => {
     router.get("/dashboard/order" + "/" + id + "/edit");
+};
+
+//Delete
+const deleteOrder = (id) => {
+    router.delete("/dashboard/order/" + id, {
+        onSuccess: (success) => {
+            console.log(success);
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                position: "top-end",
+                title: "Order Deleted Successfully",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        },
+        onError: (error) => {
+            console.log(error);
+            Swal.fire({
+                toast: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        },
+    });
 };
 </script>
 
@@ -172,7 +204,7 @@ const editOrder = (id) => {
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
                                 >
-                                    <a href="#">Delete</a>
+                                    <a @click.prevent="deleteOrder(order.id)">Delete</a>
                                 </Button>
                             </fwb-table-cell>
                         </fwb-table-row>

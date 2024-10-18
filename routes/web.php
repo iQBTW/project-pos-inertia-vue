@@ -53,6 +53,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
         Route::get('', [OrderController::class, 'index'])->name('index');
         Route::get('{order}/edit', [OrderController::class, 'edit'])->name('edit');
         Route::put('{order}', [OrderController::class, 'update'])->name('update');
+        Route::delete('{order}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('transaction')->name('transaction.')->group(function () {

@@ -91,7 +91,7 @@ class OrderController extends Controller
             ->findOrFail($id);
 
         $validated = $request->validate([
-            'amount' => 'numeric',
+            'amount' => 'required|numeric',
         ]);
 
         DB::beginTransaction();

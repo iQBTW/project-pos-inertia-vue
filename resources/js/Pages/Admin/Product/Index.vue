@@ -1,6 +1,5 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { inject } from "vue";
 import { Head, router, Link } from "@inertiajs/vue3";
 import {
     FwbTable,
@@ -13,24 +12,15 @@ import {
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Searchbar from "@/Components/Searchbar.vue";
 import Button from "primevue/button";
-import { ref, watch } from "vue";
+import { ref, watch, inject } from "vue";
 
 const Swal = inject('$swal')
 
 const props = defineProps({
     products: Object,
 });
-const emit = defineEmits(["search"]);
 
-// const showAlert = () => {
-//     Swal.fire({
-//         toast: true,
-//         icon: "success",
-//         position: "top-end",
-//         showConfirmButton: false,
-//         timer: 1500
-//     });
-// };
+const emit = defineEmits(["search"]);
 
 //Searchbar
 const search = ref("");
@@ -55,7 +45,30 @@ const editProduct = (id) => {
 
 //Delete
 const deleteProduct = (id) => {
-    router.delete("/dashboard/product/" + id);
+    router.delete("/dashboard/product/" + id, {
+        onSuccess: (success) => {
+            console.log(success);
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                position: "top-end",
+                title: "Product Deleted Successfully",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        },
+        onError: (errors) => {
+            console.log(errors);
+            Swal.fire({
+                toast: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        },
+    });
 };
 
 // Pagination

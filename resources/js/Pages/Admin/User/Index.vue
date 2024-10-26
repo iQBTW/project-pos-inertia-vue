@@ -131,26 +131,27 @@ const pageTo = (url) => {
                     <div
                         class="flex items-center ml-auto space-x-2 sm:space-x-3"
                     >
-                        <Button
-                            label="show"
-                            @click="showModal = true"
-                            severity="success"
-                            class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-black rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition-all ease-in 3s"
-                        >
-                            <svg
-                                class="w-5 h-5 mr-2 -ml-1"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
+                    <Link :href="route('user.create')">
+                            <Button
+                                label="show"
+                                severity="success"
+                                class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-black rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition-all ease-in 3s"
                             >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                            Add User
-                        </Button>
+                                <svg
+                                    class="w-5 h-5 mr-2 -ml-1"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                        clip-rule="evenodd"
+                                    ></path>
+                                </svg>
+                                Add Product
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </template>

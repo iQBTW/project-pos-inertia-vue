@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -24,6 +25,16 @@ class UserController extends Controller
         return Inertia::render('Admin/User/Index', [
             'users' => $users,
             'search' => $request->only('q')
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('Admin/User/Create', [
+            'roles' => Role::all(),
         ]);
     }
 

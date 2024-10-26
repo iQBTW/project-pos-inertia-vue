@@ -80,13 +80,25 @@ const removeRow = (index) => {
 };
 
 const storeOrder = () => {
+    const isValid = form.every(item => item.amount >= item.qty * item.price);
+    if (!isValid) {
+        Swal.fire({
+            toast: true,
+            icon: 'error',
+            position: "top-end",
+            title: 'Amount must be greater than or equal to total price!',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        return;
+    }
+
     const inputs = form.map((item) => ({
         product_id: item.product,
         qty: item.qty,
         amount: item.amount,
     }));
 
-    console.log(inputs);
 
     router.post(route("transaction.store"), {
         user_id: props.user.id,
@@ -94,7 +106,7 @@ const storeOrder = () => {
     }, {
         onSuccess: () => {
             Swal.fire({
-                toats: true,
+                toast: true,
                 icon: "success",
                 position: "top-end",
                 title: "Order Created Successfully",
@@ -104,7 +116,7 @@ const storeOrder = () => {
         },
         onError: () => {
             Swal.fire({
-                toats: true,
+                toast: true,
                 icon: "error",
                 position: "top-end",
                 title: "There was an error",
@@ -113,6 +125,7 @@ const storeOrder = () => {
             })
         }
     });
+    // console.log(response.data);
 };
 </script>
 

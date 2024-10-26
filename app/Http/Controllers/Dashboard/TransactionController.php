@@ -9,6 +9,7 @@ use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use PHPUnit\Framework\Exception;
 
 class TransactionController extends Controller
 {
@@ -53,10 +54,14 @@ class TransactionController extends Controller
 
                 $totalPrice = $product->price * $input['qty'];
 
+                if ($input['amount'] < $totalPrice) {
+                    return back()->with('error', 'Amount must be greater than Total');
+                }
+
                 $order = Order::create([
                     'invoice' => invoiceNumber(),
                     'amount' => $input['amount'],
-                    'status' => 0,
+                    'status' => 1,
                     'user_id' => $user->id,
                 ]);
 
@@ -67,9 +72,9 @@ class TransactionController extends Controller
                     'total' => $totalPrice,
                 ]);
 
-                // dd($orderD, $order, $product->stock -= $input['qty'], $product->id);
                 $product->stock -= $input['qty'];
                 $product->save();
+
             }
 
             DB::commit();

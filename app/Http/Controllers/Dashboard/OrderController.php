@@ -30,8 +30,7 @@ class OrderController extends Controller
             ->when($request->q, function ($query, $q) {
                 $query->where('users.name', 'like', '%' . $q . '%');
                 $query->orWhere('products.name', 'like', '%' . $q . '%');
-            })
-            ->paginate(10);
+            })->latest()->paginate(10);
 
         foreach ($orders as $data) {
             $data->total = currencyFormat($data->total);

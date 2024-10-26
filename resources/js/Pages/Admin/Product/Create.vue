@@ -19,10 +19,6 @@ const formProduct = useForm({
     images: [],
 });
 
-const handleImagePreview = () => {
-
-}
-
 const onFileChange = (e) => {
     formProduct.images = Array.from(e.target.files);
 }

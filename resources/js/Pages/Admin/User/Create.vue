@@ -16,6 +16,7 @@ const formUser = reactive({
     email: null,
     password: null,
     address: null,
+    role: null
 });
 
 const storeUser = () => {
@@ -115,9 +116,9 @@ const storeUser = () => {
         </Breadcrumb>
 
         <!-- Content Section -->
-        <div class="p-4 bg-white w-1/2 rounded-lg shadow-md mt-5 mb-5 mx-auto">
+        <div class="p-4 bg-white w-fit rounded-lg shadow-md mt-5 mb-5 mx-auto">
             <form @submit.prevent="storeUser">
-                <div class="flex flex-col items-center">
+                <div class="flex gap-5 justify-center items-center">
                     <div class="py-2">
                         <div class="py-2">
                             <label for="name">Name</label>
@@ -132,7 +133,7 @@ const storeUser = () => {
                     </div>
                     <div class="">
                         <div class="py-2">
-                            <label for="stock">email</label>
+                            <label for="stock">Email</label>
                         </div>
                         <input
                             type="email"
@@ -142,6 +143,8 @@ const storeUser = () => {
                             v-model="formUser.email"
                         />
                     </div>
+                </div>
+                <div class="flex gap-5 justify-center items-baseline">
                     <div class="">
                         <div class="py-2">
                             <label for="price">Password</label>
@@ -156,24 +159,39 @@ const storeUser = () => {
                     </div>
                     <div class="">
                         <div class="py-2">
-                            <label for="price">Address</label>
+                            <label for="category">Role</label>
                         </div>
-                        <input
-                            type="text"
-                            name="address"
+                        <select
+                            name="category_id"
                             class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                             id=""
-                            v-model="formUser.Address"
-                        />
-                    </div>
-                    <div class="flex items-center ml-auto gap-3 pt-5">
-                        <Button type="submit" severity="success">Submit</Button>
-                        <Button type="button" severity="danger"
-                            ><Link :href="route('user.index')"
-                                >Cancel</Link
-                            ></Button
+                            v-model="formUser.role"
                         >
+                            <option
+                                v-for="role in roles"
+                                :key="role.id"
+                                :value="role.name"
+                            >
+                                {{ role.name }}
+                            </option>
+                        </select>
                     </div>
+                </div>
+                <div class="">
+                    <div class="py-2 w-full">
+                        <label for="price">Address</label>
+                    </div>
+                    <textarea name="address" class="flex-auto w-full rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s" cols="30" rows="10" v-model="formUser.address">
+                    </textarea>
+                </div>
+
+                <div class="flex justify-end items-center ml-auto gap-3 pt-5">
+                    <Button type="submit" severity="success">Submit</Button>
+                    <Button type="button" severity="danger"
+                        ><Link :href="route('user.index')"
+                            >Cancel</Link
+                        ></Button
+                    >
                 </div>
             </form>
         </div>

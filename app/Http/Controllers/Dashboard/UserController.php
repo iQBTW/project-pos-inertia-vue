@@ -20,7 +20,7 @@ class UserController extends Controller
             $query->where('name', 'like', '%' . $q . '%');
             $query->orWhere('email', 'like', '%' . $q . '%');
             $query->orWhere('address', 'like', '%' . $q . '%');
-        })->paginate(10);
+        })->latest()->paginate(10);
 
         return Inertia::render('Admin/User/Index', [
             'users' => $users,
@@ -45,9 +45,10 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users, email',
-            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|string|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
             'address' => 'required|string|max:255',
+            'role' => 'required|in:user,admin'
         ]);
 
         $user = User::create([
@@ -56,6 +57,8 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
             'address' => $validated['address'],
         ]);
+
+        $user->assignRole($validated['role']);
 
         if ($user) {
             return redirect()->route('user.index')->with('success', 'User created successfully');

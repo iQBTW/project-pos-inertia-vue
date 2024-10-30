@@ -149,7 +149,7 @@ const pageTo = (url) => {
                                         clip-rule="evenodd"
                                     ></path>
                                 </svg>
-                                Add Product
+                                Add User
                             </Button>
                         </Link>
                     </div>

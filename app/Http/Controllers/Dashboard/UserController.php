@@ -68,6 +68,17 @@ class UserController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+
+        return Inertia::render('Admin/User/Edit', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -75,17 +86,25 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users, email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
             'address' => 'required|string|max:255',
+            'role' => 'required|in:user,admin'
         ]);
 
-        $user->update([
+        $updateData = [
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
             'address' => $validated['address'],
-        ]);
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($updateData);
+
+        $user->syncRoles([$validated['role']]);
 
         if ($user) {
             return redirect()->route('user.index')->with('success', 'User updated successfully');

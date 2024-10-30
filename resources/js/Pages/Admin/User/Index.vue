@@ -37,6 +37,11 @@ watch(search, (value) => {
     emit("search", value);
 });
 
+//Edit
+const editUser = (id) => {
+    router.get("/dashboard/user" + "/" + id + "/edit");
+};
+
 //Delete
 const deleteUser = (id) => {
     router.delete('/dashboard/user/' + id);
@@ -179,8 +184,9 @@ const pageTo = (url) => {
                             <fwb-table-cell class="flex gap-2">
                                 <Button
                                     class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300"
+                                    @click.prevent = "editUser(user.id)"
                                 >
-                                    <a href="#">Edit</a>
+                                    Edit
                                 </Button>
                                 <Button
                                     severity="danger"

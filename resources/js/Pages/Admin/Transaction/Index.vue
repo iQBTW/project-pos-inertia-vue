@@ -148,7 +148,7 @@ const storeOrder = () => {
                     >
                         <!-- <h2>item {{ index + 1 }}</h2>
                     {{ item }} -->
-                        <div class="flex items-center gap-2 px-5 pb-2">
+                        <div class="flex items-center gap-2 px-0 2xl:px-5 pb-2">
                             <div class="flex flex-col gap-2">
                                 <label for="product">Product</label>
                                 <select
@@ -210,7 +210,7 @@ const storeOrder = () => {
                                 </button>
                             </div>
                         </div>
-                        <div class="flex gap-2 px-5 pb-2">
+                        <div class="flex gap-2 pb-2 2xl:px-5">
                             <div class="flex flex-col gap-2">
                                 <label for="total">Total</label>
                                 <input

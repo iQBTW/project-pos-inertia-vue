@@ -64,9 +64,9 @@ const chartOptions = {
 
     <AdminLayout>
         <div class="my-2 mx-2">
-            <div class="grid grid-cols-3 gap-20 my-6">
+            <div class="flex flex-wrap items-center justify-center gap-20 md:justify-between lg:justify-between xl:justify-between 2xl:justify-between lg:gap-2 md:gap-20 sm:gap-2 my-6">
                 <div
-                    class="bg-white rounded-lg border border-slate-800 px-10 py-8"
+                    class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
                 >
                     <div class="flex items-center justify-between">
                         <div>
@@ -99,7 +99,7 @@ const chartOptions = {
                     </div>
                 </div>
                 <div
-                    class="bg-white rounded-lg border border-slate-800 px-10 py-8"
+                    class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
                 >
                     <div class="flex items-center justify-between">
                         <div>
@@ -132,7 +132,7 @@ const chartOptions = {
                     </div>
                 </div>
                 <div
-                    class="bg-white rounded-lg border border-slate-800 px-10 py-8"
+                    class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
                 >
                     <div class="flex items-center justify-between">
                         <div>
@@ -164,10 +164,10 @@ const chartOptions = {
                     </div>
                 </div>
             </div>
-            <div class="flex justify-center gap-2">
+            <div class="flex flex-wrap items-baseline justify-center 2xl:justify-between md:gap-2 lg:gap-2 xl:gap-2">
                 <div class="my-4">
                     <div
-                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[600px] md:w-[500px]"
+                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[380px] md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:w-[700px]"
                     >
                         <div class="px-5 pt-5 pb-2 font-bold">
                             <h2>Total Orders by Product Category</h2>
@@ -182,12 +182,12 @@ const chartOptions = {
                 </div>
                 <div class="my-4">
                     <div
-                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[600px] md:w-[500px]"
+                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[380px] md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:w-[700px]"
                     >
                         <div class="px-5 pt-5 pb-2 font-bold">
                             <h2>Best Selling Products</h2>
                         </div>
-                        <div class="px-5">
+                        <div class="md:px-1 md:py-5">
                             <div
                                 class="flex items-center justify-evenly pb-2"
                                 v-for="(product, index) in bestSellingProducts"

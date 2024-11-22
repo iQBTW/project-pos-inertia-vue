@@ -19,27 +19,34 @@ class OrderController extends Controller
     {
         $orders = Order::select(
             'orders.*',
-            'users.name as customer',
-            'products.name as product',
-            'order_details.qty as qty',
-            'order_details.total as total'
+            'order_details.id as order_detail_id',
+            'order_details.user_id as user_id',
+            'order_details.address as address',
+            'order_products.id as order_product_id',
+            'order_products.product_id as product',
+            'order_products.qty as qty',
+            'order_products.total_per_product as total_per_product',
+            'users.name as user',
+            // 'products.*',
         )
             ->join('order_details', 'order_details.order_id', '=', 'orders.id')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->join('order_products', 'order_products.order_id', '=', 'orders.id')
+            ->join('products', 'order_products.product_id', '=', 'products.id')
+            ->join('users', 'order_details.user_id', '=', 'users.id')
             ->when($request->q, function ($query, $q) {
                 $query->where('users.name', 'like', '%' . $q . '%');
                 $query->orWhere('products.name', 'like', '%' . $q . '%');
-            })->latest()->paginate(10);
+            })->latest()->get();
 
         foreach ($orders as $data) {
             $data->total = currencyFormat($data->total);
             $data->amount = currencyFormat($data->amount);
         }
 
-        return Inertia::render('Admin/Order/Index', [
-            'orders' => $orders,
-        ]);
+        return $orders;
+        // return Inertia::render('Admin/Order/Index', [
+        //     'orders' => $orders,
+        // ]);
     }
 
     /**

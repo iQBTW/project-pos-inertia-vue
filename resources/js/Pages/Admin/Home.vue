@@ -13,15 +13,12 @@ import {
 } from "chart.js";
 
 const props = defineProps({
-    orderByCategory: Array,
     categories: Array,
     orderTotal: Number,
     productTotal: Number,
     userTotal: Number,
-    bestSellingProducts: Object,
 });
 
-console.log(props.bestSellingProducts);
 
 ChartJS.register(
     Title,
@@ -41,17 +38,17 @@ const randomColor = () => {
     return color;
 };
 
-const chartOrderData = {
-    labels: ["Total Orders"],
-    datasets: props.categories.map((category) => ({
-        label: category.name,
-        data: props.orderByCategory
-            .filter((item) => item.category == category.name)
-            .map((item) => item.order_count),
-        backgroundColor: randomColor(),
-        borderColor: "rgba(1, 1, 1, 1)",
-    })),
-};
+// const chartOrderData = {
+//     labels: ["Total Orders"],
+//     datasets: props.categories.map((category) => ({
+//         label: category.name,
+//         data: props.orderByCategory
+//             .filter((item) => item.category == category.name)
+//             .map((item) => item.order_count),
+//         backgroundColor: randomColor(),
+//         borderColor: "rgba(1, 1, 1, 1)",
+//     })),
+// };
 
 const chartOptions = {
     responsive: true,
@@ -175,7 +172,6 @@ const chartOptions = {
                         <Bar
                             class="px-5"
                             id="orderByCategory"
-                            :data="chartOrderData"
                             :options="chartOptions"
                         />
                     </div>
@@ -188,7 +184,7 @@ const chartOptions = {
                             <h2>Best Selling Products</h2>
                         </div>
                         <div class="md:px-1 md:py-5">
-                            <div
+                            <!-- <div
                                 class="flex items-center justify-evenly pb-2"
                                 v-for="(product, index) in bestSellingProducts"
                                 :key="index"
@@ -215,7 +211,7 @@ const chartOptions = {
                                         {{ product.order_count }}
                                     </p>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

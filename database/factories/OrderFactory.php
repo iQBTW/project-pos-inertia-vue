@@ -19,8 +19,9 @@ class OrderFactory extends Factory
     {
         return [
             'invoice' => fake()->unique()->numerify('INV-####'),
-            'user_id' => fake()->numberBetween(1, User::count()),
             'amount' => fake()->numberBetween(2000, 50000),
+            'total' => fake()->numberBetween(2000, 50000),
+            'status' => fake()->numberBetween(0, 1),
         ];
     }
 }

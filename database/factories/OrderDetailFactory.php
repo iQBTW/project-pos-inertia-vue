@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Order;
-use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,10 +19,9 @@ class OrderDetailFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => fake()->numberBetween(1, User::count()),
             'order_id' => fake()->unique()->numberBetween(1, Order::count()),
-            'product_id' => fake()->numberBetween(1, Product::count()),
-            'qty' => fake()->numberBetween(1, 10),
-            'total' => fake()->numberBetween(2000, 50000),
+            'address' => fake()->address(),
         ];
     }
 }

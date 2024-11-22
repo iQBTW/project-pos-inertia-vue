@@ -24,7 +24,6 @@ class ProductFactory extends Factory
             'slug' => Str::slug($name),
             'stock' => fake()->numberBetween(1, 50),
             'price' => fake()->numberBetween(2000, 20000),
-            'category_id' => fake()->numberBetween(1, Category::count()),
         ];
     }
 }

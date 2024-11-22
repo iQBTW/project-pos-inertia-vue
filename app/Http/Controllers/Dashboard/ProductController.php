@@ -20,12 +20,9 @@ class ProductController extends Controller
         $products = Product::with('product_images')
             ->select(
                 'products.*',
-                'categories.name as category',
             )
-            ->join('categories', 'products.category_id', '=', 'categories.id')
             ->when($request->q, function ($query, $q) {
                 $query->where('products.name', 'like', '%' . $q . '%');
-                $query->orWhere('categories.name', 'like', '%' . $q . '%');
             })->paginate(10);
 
         foreach ($products as $product) {

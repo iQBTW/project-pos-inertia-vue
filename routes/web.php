@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\ProductCategoryController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProductController;
@@ -68,6 +69,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
         Route::post('store', [CategoryController::class, 'store'])->name('store');
         Route::put('{category}', [CategoryController::class, 'update'])->name('update');
         Route::delete('{category}', [CategoryController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('product_category')->name('product_category.')->group(function () {
+        Route::get('', [ProductCategoryController::class, 'index'])->name('index');
+        Route::post('store', [ProductCategoryController::class, 'store'])->name('store');
     });
 
     Route::prefix('role')->name('role.')->group(function () {

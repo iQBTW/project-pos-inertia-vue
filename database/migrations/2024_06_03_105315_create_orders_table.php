@@ -14,11 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->string('invoice', 102)->unique();
             $table->decimal('amount', 8, 2);
+            $table->decimal('total', 8, 2);
             $table->boolean('status')->default(0);
-            $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

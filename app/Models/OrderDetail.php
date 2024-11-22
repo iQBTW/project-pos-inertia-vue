@@ -10,10 +10,9 @@ class OrderDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'order_id',
-        'product_id',
-        'qty',
-        'total',
+        'address',
     ];
 
     public function orders()
@@ -21,8 +20,8 @@ class OrderDetail extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function products()
+    public function users()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(User::class);
     }
 }

@@ -17,6 +17,7 @@ const props = defineProps({
     orderTotal: Number,
     productTotal: Number,
     userTotal: Number,
+    bestSellingProducts: Object,
 });
 
 
@@ -49,6 +50,7 @@ const randomColor = () => {
 //         borderColor: "rgba(1, 1, 1, 1)",
 //     })),
 // };
+
 
 const chartOptions = {
     responsive: true,
@@ -184,7 +186,7 @@ const chartOptions = {
                             <h2>Best Selling Products</h2>
                         </div>
                         <div class="md:px-1 md:py-5">
-                            <!-- <div
+                            <div
                                 class="flex items-center justify-evenly pb-2"
                                 v-for="(product, index) in bestSellingProducts"
                                 :key="index"
@@ -211,7 +213,7 @@ const chartOptions = {
                                         {{ product.order_count }}
                                     </p>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>

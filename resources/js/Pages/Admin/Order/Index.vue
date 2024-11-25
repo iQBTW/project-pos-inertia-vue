@@ -15,7 +15,7 @@ import Button from "primevue/button";
 import { ref, watch, inject } from "vue";
 
 const props = defineProps({
-    orders: Object,
+    orders: Array,
 });
 
 const Swal = inject("$swal");
@@ -171,12 +171,10 @@ const deleteOrder = (id) => {
                         <fwb-table-head-cell>No</fwb-table-head-cell>
                         <fwb-table-head-cell>Invoice</fwb-table-head-cell>
                         <fwb-table-head-cell>Customer Name</fwb-table-head-cell>
-                        <fwb-table-head-cell>Product</fwb-table-head-cell>
                         <fwb-table-head-cell>Quantity</fwb-table-head-cell>
                         <fwb-table-head-cell>Total to Pay</fwb-table-head-cell>
-                        <fwb-table-head-cell
-                            >Received Amount</fwb-table-head-cell
-                        >
+                        <fwb-table-head-cell>Received Amount</fwb-table-head-cell>
+                        <fwb-table-head-cell>Status</fwb-table-head-cell>
                         <fwb-table-head-cell>Action</fwb-table-head-cell>
                     </fwb-table-head>
                     <fwb-table-body>
@@ -186,11 +184,11 @@ const deleteOrder = (id) => {
                         >
                             <fwb-table-cell>{{ index + 1 }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.invoice }}</fwb-table-cell>
-                            <fwb-table-cell>{{ order.user }}</fwb-table-cell>
-                            <fwb-table-cell>{{ order.product }}</fwb-table-cell>
+                            <fwb-table-cell>{{ order.order_details.user.name }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.qty }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.total }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.amount }}</fwb-table-cell>
+                            <fwb-table-cell>{{ order.status }}</fwb-table-cell>
                             <fwb-table-cell class="flex gap-2">
                                 <Button
                                     class="transition-all ease-in 3s border border-yellow-300 hover:text-white hover:bg-yellow-300"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use Carbon\Carbon;
 use DB;
 use Inertia\Inertia;
 use App\Models\Order;
@@ -17,36 +18,24 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::select(
-            'orders.*',
-            'order_details.id as order_detail_id',
-            'order_details.user_id as user_id',
-            'order_details.address as address',
-            'order_products.id as order_product_id',
-            'order_products.product_id as product',
-            'order_products.qty as qty',
-            'order_products.total_per_product as total_per_product',
-            'users.name as user',
-            // 'products.*',
-        )
-            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
-            ->join('order_products', 'order_products.order_id', '=', 'orders.id')
-            ->join('products', 'order_products.product_id', '=', 'products.id')
-            ->join('users', 'order_details.user_id', '=', 'users.id')
+        $orders = Order::with(['order_products.product', 'order_details.user'])
             ->when($request->q, function ($query, $q) {
-                $query->where('users.name', 'like', '%' . $q . '%');
-                $query->orWhere('products.name', 'like', '%' . $q . '%');
-            })->latest()->get();
+                $query->where('orders.invoice', 'like', '%' . $q . '%')
+                    ->orWhereHas('order_details.user', function ($subQuery) use ($q) {
+                        $subQuery->where('name', 'like', '%' . $q . '%');
+                    });
+            })->latest()->paginate(10);
 
         foreach ($orders as $data) {
             $data->total = currencyFormat($data->total);
             $data->amount = currencyFormat($data->amount);
+            $data->status = statusToString($data->status);
+            $data->formatted_date = Carbon::parse($data->created_at)->translatedFormat('d F Y');
         }
 
-        return $orders;
-        // return Inertia::render('Admin/Order/Index', [
-        //     'orders' => $orders,
-        // ]);
+        return Inertia::render('Admin/Order/Index', [
+            'orders' => $orders,
+        ]);
     }
 
     /**
@@ -54,23 +43,11 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        $order = Order::select(
-            'orders.*',
-            'users.id as user_id',
-            'users.name as user',
-            'products.id as product_id',
-            'products.name as product',
-            'order_details.id as order_detail_id',
-            'order_details.qty as qty',
-            'order_details.total as total'
-        )
-            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->join('users', 'orders.user_id', '=', 'users.id')
+        $order = Order::with(['order_products.product', 'order_details.user'])
             ->findOrFail($id);
 
         $order->status = statusToString($order->status);
-
+        $order->formatted_date = Carbon::parse($order->created_at)->translatedFormat('d F Y');
         return Inertia::render('Admin/Order/Edit', [
             'order' => $order
         ]);
@@ -81,19 +58,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $order = Order::select(
-            'orders.*',
-            'users.id as user_id',
-            'users.name as user',
-            'products.id as product_id',
-            'products.name as product',
-            'order_details.id as order_detail_id',
-            'order_details.qty as qty',
-            'order_details.total as total'
-        )
-            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->join('users', 'orders.user_id', '=', 'users.id')
+        $order = $order = Order::with(['order_products.product', 'order_details.user'])
             ->findOrFail($id);
 
         $validated = $request->validate([

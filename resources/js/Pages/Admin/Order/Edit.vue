@@ -5,52 +5,38 @@ import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
 
-
 const Swal = inject("$swal");
 
 const props = defineProps({
     order: Object,
-    products: Object,
-    users: Object,
 });
 
-const formOrder = useForm({
-    invoice: props.order.invoice || "",
-    product_id: props.order.product_id || "",
-    product: props.order.product || "",
+const form = useForm({
     amount: props.order.amount || 0,
-    status: props.order.status || "",
-    qty: props.order.qty || 0,
-    total: props.order.total || 0,
-    user_id: props.order.user_id || "",
-    user: props.order.user || "",
-    order_detail_id: props.order.order_detail_id || 0,
 });
 
 const updateOrder = (id) => {
-    const formData = new FormData();
-    // formData.append("invoice", formOrder.invoice);
-    // formData.append("product_id", formOrder.product_id);
-    formData.append("amount", formOrder.amount);
-    // formData.append("status", formOrder.status);
-    // formData.append("qty", formOrder.qty);
-    // formData.append("total", formOrder.total);
-    // formData.append("user_id", formOrder.user_id);
-    // formData.append("order_detail_id", formOrder.order_detail_id);
-    formData.append("_method", "PUT");
+    const isValid = form.amount >= props.order.total;
+    if (!isValid) {
+        Swal.fire({
+            toast: true,
+            icon: "error",
+            position: "top-end",
+            title: 'Amount must be greater than or equal to total amount',
+            showConfirmButton: false,
+            timer: 2000,
+        });
+        return;
+    }
+    // const formData = new FormData();
+    // formData.append("amount", form.amount);
+    // formData.append("_method", "PUT");
 
-    console.log("FormData:", {
-        invoice: formOrder.invoice,
-        product_id: formOrder.product_id,
-        amount: formOrder.amount,
-        status: formOrder.status,
-        qty: formOrder.qty,
-        total: formOrder.total,
-        user_id: formOrder.user_id,
-        order_detail_id: formOrder.order_detail_id,
-    });
+    // console.log("FormData:", {
+    //     amount: form.amount,
+    // });
 
-    router.post(`/dashboard/order/${id}`, formData, {
+    router.post(`/dashboard/order/${id}`, form, {
         onError: (error) => {
             console.log(error);
             Swal.fire({
@@ -150,104 +136,56 @@ const updateOrder = (id) => {
         <!-- Content Section -->
         <div class="p-4 bg-white w-[600px] rounded-lg shadow-md mt-5 mb-5 mx-auto">
             <form @submit.prevent="updateOrder(order.id)">
-                <div class="flex flex-col items-center">
-                    <div class="py-2">
-                        <div class="py-2">
-                            <label for="name">Invoice</label>
+                <div class="flex flex-col">
+                    <div class="text-right pr-2">
+                        <label for="invoice" class="font-bold text-2xl">INVOICE</label>
+                        <div class="flex justify-between items-center">
+                            <div class="text-left">
+                                <p class="font-bold text-sm">BILLED TO:</p>
+                                <p class="font-light text-sm">{{ order.order_details.user.name }}</p>
+                                <p class="font-light text-sm">{{ order.order_details.address }}</p>
+                            </div>
+                            <div class="">
+                                <p class="font-bold text-sm">{{ order.status }}</p>
+                                <p class="font-light text-sm">#{{ order.invoice }}</p>
+                                <p class="font-light text-sm">{{ order.formatted_date }}</p>
+                            </div>
                         </div>
-                        <input
-                            type="text"
-                            name="invoice"
-                            id="invoice"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            v-model="formOrder.invoice"
-                            disabled
-                        />
-                    </div>
-                    <div class="">
-                        <div class="py-2">
-                            <label for="price">Status</label>
+                        <div class="mt-5">
+                            <table class="w-full text-center">
+                                <thead>
+                                    <tr class="bg-slate-400">
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-black border-b-2" v-for="item in order.order_products" :key="item.id">
+                                        <td>{{ item.product.name }}</td>
+                                        <td>{{ item.qty_per_product }}</td>
+                                        <td>{{ item.product.price }}</td>
+                                        <td>{{ item.total_per_product }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="pt-5">
+                                <div class="border-b-2 border-b-black">
+                                    <p class="font-bold text-xl">Total {{ order.total }}</p>
+                                </div>
+                                <div class="pt-2">
+                                    <p class="font-bold text-xl">Total Payed</p>
+                                    <input type="text" class="text-center font-bold rounded border-0 w-[100px]" name="amount" v-model="form.amount">
+                                </div>
+                            </div>
                         </div>
-                        <input
-                            type="text"
-                            name="status"
-                            id="status"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            v-model="formOrder.status"
-                            disabled
-                        />
-                    </div>
-                    <div class="">
-                        <div class="py-2">
-                            <label for="stock">Product</label>
-                        </div>
-                        <input
-                            type="text"
-                            id="product"
-                            name="product"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            v-model="formOrder.product"
-                            disabled
-                        />
-                    </div>
-                    <div class="">
-                        <div class="py-2">
-                            <label for="stock">Qty</label>
-                        </div>
-                        <input
-                            type="number"
-                            id="qty"
-                            name="qty"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            v-model="formOrder.qty"
-                            disabled
-                            />
-                        </div>
-                    <div class="">
-                        <div class="py-2">
-                            <label for="stock">User</label>
-                        </div>
-                        <input
-                            type="text"
-                            id="user"
-                            name="user"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            v-model="formOrder.user"
-                            disabled
-                        />
-                    </div>
-                    <div class="">
-                        <div class="py-2">
-                            <label for="stock">Total</label>
-                        </div>
-                        <input
-                        type="number"
-                            id="total"
-                            name="total"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            v-model="formOrder.total"
-                            disabled
-                        />
-                    </div>
-                    <div class="">
-                        <div class="py-2">
-                            <label for="stock">Amount</label>
-                        </div>
-                        <input
-                            type="number"
-                            name="amount"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            id="amount"
-                            v-model="formOrder.amount"
-                        />
                     </div>
                     <div class="flex items-center ml-auto gap-3 pt-5">
                         <Button type="submit" severity="success">Submit</Button>
-                        <Button type="button" severity="danger"
-                            ><Link :href="route('order.index')"
-                                >Cancel</Link
-                            ></Button
-                        >
+                        <Button type="button" severity="danger">
+                            <Link :href="route('order.index')">Cancel</Link>
+                        </Button>
                     </div>
                 </div>
             </form>

@@ -32,18 +32,13 @@ class Product extends Model
         return $this->hasMany(ProductCategory::class);
     }
 
-    public function categories()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
     public function product_images()
     {
         return $this->hasMany(ProductImage::class);
     }
 
-    public function order_details()
+    public function order_products()
     {
-        return $this->belongsTo(OrderDetail::class);
+        return $this->hasMany(OrderProduct::class);
     }
 }

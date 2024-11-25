@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
-            $table->integer('qty');
+            $table->integer('qty_per_product');
             $table->decimal('total_per_product', 8, 2);
             $table->timestamps();
 

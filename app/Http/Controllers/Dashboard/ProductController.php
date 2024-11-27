@@ -17,10 +17,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::with('product_images')
-            ->select(
-                'products.*',
-            )
+        $products = Product::with(['product_images', 'categories'])
             ->when($request->q, function ($query, $q) {
                 $query->where('products.name', 'like', '%' . $q . '%');
             })->paginate(10);
@@ -94,26 +91,19 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
-        $product = Product::with('product_images')->findOrFail($id);
+        $product = Product::with(['product_images', 'categories'])->findOrFail($id);
+        $categories = Category::all();
 
         // return $product;
         $product->price = number_format($product->price, 0, '.', '');
 
         return Inertia::render('Admin/Product/Edit', [
-            'categories' => Category::all(),
             'product' => $product,
+            'categories' => $categories,
         ]);
     }
 
@@ -128,7 +118,8 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'stock' => 'required|numeric',
             'price' => 'required|numeric',
-            // 'category_id' => 'required|exists:categories,id',
+            'category_ids' => 'array',
+            'category_ids.*' => 'exists:categories,id',
             'images.*' => 'image|mimes:jpg, jpeg, png|max:2048',
         ]);
 
@@ -140,6 +131,7 @@ class ProductController extends Controller
                 'stock' => $validated['stock'],
                 'price' => $validated['price'],
             ]);
+            $product->categories()->sync($validated['category_ids']);
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $file) {

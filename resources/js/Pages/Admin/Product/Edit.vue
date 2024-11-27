@@ -4,6 +4,7 @@ import { inject } from "vue";
 import { Head, router, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
+import RadioButton from "primevue/radiobutton";
 
 const Swal = inject("$swal");
 
@@ -16,7 +17,7 @@ const formProduct = useForm({
     name: props.product.name || "",
     stock: props.product.stock || 0,
     price: props.product.price || 0,
-    // category_id: props.product.category_id || "",
+    category_ids: props.product.categories?.map((category) => category.id) || [],
     images: [],
 });
 
@@ -29,8 +30,12 @@ const updateProduct = (id) => {
     formData.append("name", formProduct.name);
     formData.append("stock", formProduct.stock);
     formData.append("price", formProduct.price);
-    // formData.append("category_id", formProduct.category_id);
     formData.append("_method", "PUT");
+
+    formProduct.category_ids.forEach((categoryId) => {
+        formData.append("category_ids[]", categoryId);
+    });
+
     for (let i = 0; i < formProduct.images.length; i++) {
         formData.append("images[]", formProduct.images[i]);
     }
@@ -39,7 +44,7 @@ const updateProduct = (id) => {
         name: formProduct.name,
         stock: formProduct.stock,
         price: formProduct.price,
-        category_id: formProduct.category_id,
+        category_ids: formProduct.category_ids,
         images: formProduct.images,
     });
 
@@ -172,7 +177,7 @@ const deleteProductImage = (id) => {
         <div class="p-4 bg-white w-[600px] rounded-lg shadow-md mt-5 mb-5 mx-auto">
             <form @submit.prevent="updateProduct(product.id)">
                 <div class="flex flex-col items-center">
-                    <div class="py-2">
+                    <div class="py-2 w-[295px]">
                         <div class="py-2">
                             <label for="name">Product Name</label>
                         </div>
@@ -180,61 +185,66 @@ const deleteProductImage = (id) => {
                             type="text"
                             name="name"
                             id="name"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                            class="flex-auto w-full rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 transition-all ease-in-out 3s"
                             v-model="formProduct.name"
                         />
                     </div>
-                    <div class="">
+                    <div class="w-[295px]">
                         <div class="py-2">
                             <label for="stock">Stock</label>
                         </div>
                         <input
                             type="number"
                             name="stock"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                            class="flex-auto w-full rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 transition-all ease-in-out 3s"
                             id=""
                             v-model="formProduct.stock"
                         />
                     </div>
-                    <div class="">
+                    <div class="w-[295px]">
                         <div class="py-2">
                             <label for="price">Price</label>
                         </div>
                         <input
                             type="number"
                             name="price"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                            class="flex-auto w-full rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 transition-all ease-in-out 3s"
                             id=""
                             v-model="formProduct.price"
                         />
                     </div>
-                    <!-- <div class="">
+
+                    <div class="w-[295px]">
                         <div class="py-2">
                             <label for="category">Category</label>
                         </div>
-                        <select
-                            name="category_id"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            id=""
-                            v-model="formProduct.category_id"
-                        >
-                            <option value="">Category</option>
-                            <option
+                        <div class="gap-4">
+                            <!-- Loop untuk kategori -->
+                            <div
                                 v-for="category in categories"
                                 :key="category.id"
-                                :value="category.id"
+                                class="flex items-center gap-2"
                             >
-                                {{ category.name }}
-                            </option>
-                        </select>
-                    </div> -->
-                    <div class="py-2 mx-auto">
+                                <input
+                                    type="checkbox"
+                                    class="w-4 h-4 rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 transition-all ease-in-out 3s"
+                                    :id="`category-${category.id}`"
+                                    :value="category.id"
+                                    v-model="formProduct.category_ids"
+                                />
+                                <label :for="`category-${category.id}`">
+                                    {{ category.name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-2 mx-auto w-[295px]">
                         <div class="py-2">
                             <label for="Image">Image</label>
                         </div>
                         <input
                             type="file"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
+                            class="flex-auto w-full rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 transition-all ease-in-out 3s"
                             name="images"
                             id="images"
                             @change="onFileChange"

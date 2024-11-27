@@ -207,7 +207,7 @@ const pageTo = (url) => {
                             <fwb-table-cell>{{ product.stock }}</fwb-table-cell>
                             <fwb-table-cell>{{ product.price }}</fwb-table-cell>
                             <fwb-table-cell>{{
-                                product.category
+                                product.categories.map((item) => item.name).join(", ")
                             }}</fwb-table-cell>
                             <fwb-table-cell class="flex gap-2">
                                 <Button

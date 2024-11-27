@@ -12,13 +12,11 @@ const props = defineProps({
     categories: Object,
 });
 
-console.log(props.product.product_images);
-
 const formProduct = useForm({
     name: props.product.name || "",
     stock: props.product.stock || 0,
     price: props.product.price || 0,
-    category_id: props.product.category_id || "",
+    // category_id: props.product.category_id || "",
     images: [],
 });
 
@@ -31,7 +29,7 @@ const updateProduct = (id) => {
     formData.append("name", formProduct.name);
     formData.append("stock", formProduct.stock);
     formData.append("price", formProduct.price);
-    formData.append("category_id", formProduct.category_id);
+    // formData.append("category_id", formProduct.category_id);
     formData.append("_method", "PUT");
     for (let i = 0; i < formProduct.images.length; i++) {
         formData.append("images[]", formProduct.images[i]);
@@ -210,7 +208,7 @@ const deleteProductImage = (id) => {
                             v-model="formProduct.price"
                         />
                     </div>
-                    <div class="">
+                    <!-- <div class="">
                         <div class="py-2">
                             <label for="category">Category</label>
                         </div>
@@ -229,7 +227,7 @@ const deleteProductImage = (id) => {
                                 {{ category.name }}
                             </option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="py-2 mx-auto">
                         <div class="py-2">
                             <label for="Image">Image</label>

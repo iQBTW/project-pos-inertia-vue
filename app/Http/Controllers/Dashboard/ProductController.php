@@ -107,6 +107,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::with('product_images')->findOrFail($id);
+
+        // return $product;
         $product->price = number_format($product->price, 0, '.', '');
 
         return Inertia::render('Admin/Product/Edit', [
@@ -121,14 +123,12 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        // $product_images = ProductImage::where('id', $id);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'stock' => 'required|numeric',
             'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
-            // 'images' => 'required',
+            // 'category_id' => 'required|exists:categories,id',
             'images.*' => 'image|mimes:jpg, jpeg, png|max:2048',
         ]);
 
@@ -139,7 +139,6 @@ class ProductController extends Controller
                 'name' => $validated['name'],
                 'stock' => $validated['stock'],
                 'price' => $validated['price'],
-                'category_id' => $validated['category_id'],
             ]);
 
             if ($request->hasFile('images')) {

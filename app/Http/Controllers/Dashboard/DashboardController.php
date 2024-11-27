@@ -46,7 +46,7 @@ class DashboardController extends Controller
         //     ->get();
 
 
-        return Inertia::render('Admin/Home', [
+        return Inertia::render('Admin/Index', [
             // 'orderByCategory' => $orderByCategory,
             'bestSellingProducts' => $bestSellingProducts,
             'categories' => $categories,

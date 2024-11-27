@@ -28,13 +28,6 @@ const updateOrder = (id) => {
         });
         return;
     }
-    // const formData = new FormData();
-    // formData.append("amount", form.amount);
-    // formData.append("_method", "PUT");
-
-    // console.log("FormData:", {
-    //     amount: form.amount,
-    // });
 
     router.post(`/dashboard/order/${id}`, form, {
         onError: (error) => {

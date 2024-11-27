@@ -21,48 +21,59 @@ const form = reactive([
     },
 ]);
 
-const updatePrice = (index) => {
-    const selectedProduct = props.products.find(
-        (product) => product.id === form[index].product
-    );
-    if (selectedProduct) {
-        form[index].price = selectedProduct.price;
-    } else {
-        form[index].price = 0;
-    }
-};
-const updateTotal = (index) => {
-    const selectedProduct = props.products.find(
-        (product) => product.id === form[index].product
-    );
-    if (selectedProduct) {
-        form[index].total = selectedProduct.price * form[index].qty;
-    } else {
-        form[index].total = 0;
-    }
-};
+// const updatePrice = (index) => {
+//     const selectedProduct = props.products.find(
+//         (product) => product.id === form[index].product
+//     );
+//     if (selectedProduct) {
+//         form[index].price = selectedProduct.price;
+//     } else {
+//         form[index].price = 0;
+//     }
+// };
+// const updateTotal = (index) => {
+//     const selectedProduct = props.products.find(
+//         (product) => product.id === form[index].product
+//     );
+//     if (selectedProduct) {
+//         form[index].total = selectedProduct.price * form[index].qty;
+//     } else {
+//         form[index].total = 0;
+//     }
+// };
 
-watch(
-    () =>
-        form.map((item) => ({
-            product: item.product,
-            qty: item.qty,
-            total: item.total,
-        })),
-    (newValues, oldValues) => {
-        newValues.forEach((newValue, index) => {
-            if (
-                newValue.product !== oldValues[index]?.product ||
-                newValue.qty !== oldValues[index]?.qty ||
-                newValue.total !== oldValues[index]?.total
-            ) {
-                updatePrice(index);
-                updateTotal(index);
-            }
-        });
-    },
-    { deep: true }
-);
+// watch(
+//     () =>
+//         form.map((item) => ({
+//             product: item.product,
+//             qty: item.qty,
+//             total: item.total,
+//         })),
+//     (newValues, oldValues) => {
+//         newValues.forEach((newValue, index) => {
+//             if (
+//                 newValue.product !== oldValues[index]?.product ||
+//                 newValue.qty !== oldValues[index]?.qty ||
+//                 newValue.total !== oldValues[index]?.total
+//             ) {
+//                 updatePrice(index);
+//                 updateTotal(index);
+//             }
+//         });
+//     },
+//     { deep: true }
+// );
+
+const calculatedProductPrice = (price) => {
+    price.total_per_product = product.price * product.qty
+}
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+    }).format(value)
+}
 
 const addRow = () => {
     form.push({
@@ -146,68 +157,19 @@ const storeOrder = () => {
                         v-for="(item, index) in form"
                         :key="index"
                     >
-                        <!-- <h2>item {{ index + 1 }}</h2>
-                    {{ item }} -->
-                        <div class="flex items-center gap-2 px-0 2xl:px-5 pb-2">
-                            <div class="flex flex-col gap-2">
-                                <label for="product">Product</label>
-                                <select
-                                    name="product"
-                                    id="product"
-                                    class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                                    v-model="item.product"
-                                >
-                                    <option value="" selected>Pilih Product</option>
-                                    <option
-                                        :value="product.id"
-                                        :key="index"
-                                        v-for="(product, index) in products"
-                                    >
-                                        {{ product.name }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <label for="qty">Quantity</label>
+                        <div class="px-0 2xl:px-5 pb-2">
+                            <div v-for="product in products" :key="product.id" class="flex items-center gap-2 w-fit py-2">
+                                <img :src="`/storage/${product.product_images[0].image}`" alt="Product Image" class="flex w-24 h-24" />
+                                <h2>{{ product.name }}</h2>
+                                <p>Price: {{ formatCurrency(product.price) }}</p>
                                 <input
-                                    class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
                                     type="number"
-                                    name="qty"
-                                    v-model="item.qty"
-                                    id=""
+                                    v-model.number="product.quantity"
+                                    min="0"
+                                    @input="calculatedProductPrice(product)"
+                                    placeholder="Quantity"
                                 />
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <label for="price">Price per Piece</label>
-                                <input
-                                    class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                                    type="number"
-                                    name="price"
-                                    id="price"
-                                    v-model="item.price"
-                                    readonly
-                                />
-                            </div>
-                            <div
-                                class="rounded-full px-[7px] pt-1 bg-red-500 mt-[31px] hover:bg-red-700 hover:shadow-lg hover:shadow-slate-300 transition-all ease-in-out 5s"
-                            >
-                                <button class="" @click="removeRow(index)">
-                                    <svg
-                                        class="w-6 h-6 text-slate-200 dark:text-white"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                            clip-rule="evenodd"
-                                        />
-                                    </svg>
-                                </button>
+                                <p>Total: {{ formatCurrency(price.total_per_product) }}</p>
                             </div>
                         </div>
                         <div class="flex gap-2 pb-2 2xl:px-5">

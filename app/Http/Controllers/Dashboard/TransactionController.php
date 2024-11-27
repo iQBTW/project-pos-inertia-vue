@@ -15,7 +15,9 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('product_images')->get();
+
+        // return $products;
         $user = auth()->user();
 
         foreach ($products as $product) {
@@ -26,7 +28,6 @@ class TransactionController extends Controller
             'products' => $products,
             'user' => $user
         ]);
-
     }
 
     public function store(Request $request)

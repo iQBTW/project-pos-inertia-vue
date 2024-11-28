@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->string('invoice', 102)->unique();
             $table->decimal('amount', 8, 2);
-            $table->integer('qty');
             $table->decimal('total', 8, 2);
             $table->boolean('status')->default(0);
             $table->timestamps();

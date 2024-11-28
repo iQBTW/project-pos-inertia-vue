@@ -171,7 +171,6 @@ const deleteOrder = (id) => {
                         <fwb-table-head-cell>No</fwb-table-head-cell>
                         <fwb-table-head-cell>Invoice</fwb-table-head-cell>
                         <fwb-table-head-cell>Customer Name</fwb-table-head-cell>
-                        <fwb-table-head-cell>Quantity</fwb-table-head-cell>
                         <fwb-table-head-cell>Total to Pay</fwb-table-head-cell>
                         <fwb-table-head-cell>Received Amount</fwb-table-head-cell>
                         <fwb-table-head-cell>Status</fwb-table-head-cell>
@@ -185,7 +184,6 @@ const deleteOrder = (id) => {
                             <fwb-table-cell>{{ index + 1 }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.invoice }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.order_details.user.name }}</fwb-table-cell>
-                            <fwb-table-cell>{{ order.qty }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.total }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.amount }}</fwb-table-cell>
                             <fwb-table-cell>{{ order.status }}</fwb-table-cell>

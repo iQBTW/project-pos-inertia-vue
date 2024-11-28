@@ -1,12 +1,13 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { inject } from "vue";
-import { Head, router, useForm, Link } from "@inertiajs/vue3";
+import { Head, router, useForm, Link, usePage } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Button from "primevue/button";
-import RadioButton from "primevue/radiobutton";
 
 const Swal = inject("$swal");
+
+const page = usePage();
 
 const props = defineProps({
     product: Object,
@@ -40,17 +41,9 @@ const updateProduct = (id) => {
         formData.append("images[]", formProduct.images[i]);
     }
 
-    console.log("FormData:", {
-        name: formProduct.name,
-        stock: formProduct.stock,
-        price: formProduct.price,
-        category_ids: formProduct.category_ids,
-        images: formProduct.images,
-    });
-
     router.post(`/dashboard/product/${id}`, formData, {
-        onError: (errors) => {
-            console.log(errors);
+        onError: (error) => {
+            console.log(error);
             Swal.fire({
                 toast: true,
                 icon: "error",
@@ -99,7 +92,6 @@ const deleteProductImage = (id) => {
             });
         },
     });
-    // router.post(route("product.deleteImage"), formProduct["productImage"]);
 };
 </script>
 
@@ -143,7 +135,7 @@ const deleteProductImage = (id) => {
                             ></path>
                         </svg>
                         <Link
-                            :href="route('category.index')"
+                            :href="route('product.index')"
                             class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white"
                             >Products</Link
                         >
@@ -219,7 +211,6 @@ const deleteProductImage = (id) => {
                             <label for="category">Category</label>
                         </div>
                         <div class="gap-4">
-                            <!-- Loop untuk kategori -->
                             <div
                                 v-for="category in categories"
                                 :key="category.id"

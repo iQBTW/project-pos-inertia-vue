@@ -157,9 +157,9 @@ const updateOrder = (id) => {
                                 <tbody>
                                     <tr class="border-black border-b-2" v-for="item in order.order_products" :key="item.id">
                                         <td>{{ item.product.name }}</td>
-                                        <td>{{ item.qty_per_product }}</td>
+                                        <td>{{ item.qty }}</td>
                                         <td>{{ item.product.price }}</td>
-                                        <td>{{ item.total_per_product }}</td>
+                                        <td>{{ item.total_price }}</td>
                                     </tr>
                                 </tbody>
                             </table>

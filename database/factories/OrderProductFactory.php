@@ -21,8 +21,8 @@ class OrderProductFactory extends Factory
         return [
             'order_id' => fake()->numberBetween(1, Order::count()),
             'product_id' => fake()->numberBetween(1, Product::count()),
-            'qty_per_product' => fake()->numberBetween(1, 10),
-            'total_per_product' => fake()->numberBetween(2000, 20000),
+            'qty' => fake()->numberBetween(1, 10),
+            'unit_price' => fake()->numberBetween(2000, 20000),
         ];
     }
 }

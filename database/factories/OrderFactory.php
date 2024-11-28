@@ -20,7 +20,6 @@ class OrderFactory extends Factory
         return [
             'invoice' => fake()->unique()->numerify('INV-####'),
             'amount' => fake()->numberBetween(2000, 50000),
-            'qty' => fake()->numberBetween(1, 50),
             'total' => fake()->numberBetween(2000, 50000),
             'status' => fake()->numberBetween(0, 1),
         ];

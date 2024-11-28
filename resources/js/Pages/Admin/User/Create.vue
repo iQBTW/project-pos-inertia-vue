@@ -179,7 +179,7 @@ const storeUser = () => {
                 </div>
                 <div class="">
                     <div class="py-2 w-full">
-                        <label for="price">Address</label>
+                        <label for="address">Address</label>
                     </div>
                     <textarea name="address" class="flex-auto w-full rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s" cols="30" rows="10" v-model="formUser.address">
                     </textarea>

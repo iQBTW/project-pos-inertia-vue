@@ -13,10 +13,10 @@ class OrderProduct extends Model
         'order_id',
         'product_id',
         'qty',
-        'total_per_product',
+        'unit_price',
     ];
 
-    public function orders()
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }

@@ -18,7 +18,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::with(['order_products.product', 'order_details.user'])
+        $orders = Order::with(['order_details.user'])
             ->when($request->q, function ($query, $q) {
                 $query->where('orders.invoice', 'like', '%' . $q . '%')
                     ->orWhereHas('order_details.user', function ($subQuery) use ($q) {
@@ -43,8 +43,22 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        $order = Order::with(['order_products.product', 'order_details.user'])
-            ->findOrFail($id);
+        $order = Order::select('id', 'invoice', 'amount', 'total', 'status')
+            ->with(['order_details.user'])
+            ->with([
+                'order_products' => function ($query) {
+                    $query->select(
+                        'order_id',
+                        'product_id',
+                        'qty',
+                        'unit_price',
+                        DB::raw('(qty * unit_price) as total_price')
+                    );
+                },
+                'order_products.product' => function ($query) {
+                    $query->select('id', 'name', 'price');
+                }
+            ])->findOrFail($id);
 
         $order->status = statusToString($order->status);
         $order->formatted_date = Carbon::parse($order->created_at)->translatedFormat('d F Y');

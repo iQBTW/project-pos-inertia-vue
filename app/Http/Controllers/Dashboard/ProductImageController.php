@@ -62,6 +62,6 @@ class ProductImageController extends Controller
      */
     public function destroy(ProductImage $productImage)
     {
-        dd($productImage);
+        //
     }
 }

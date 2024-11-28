@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Models\OrderProduct;
 use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\Product;
@@ -16,8 +17,6 @@ class TransactionController extends Controller
     public function index()
     {
         $products = Product::with('product_images')->get();
-
-        // return $products;
         $user = auth()->user();
 
         foreach ($products as $product) {
@@ -34,48 +33,55 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         $validated = $request->validate([
+            'cart' => 'required|array',
             'user_id' => 'required|exists:users,id',
-            'inputs.*.amount' => 'required|numeric',
-            'inputs.*.product_id' => 'required|exists:products,id',
-            'inputs.*.qty' => 'required|numeric'
+            'cart.*.product_id' => 'required|exists:products,id',
+            'cart.*.qty' => 'required|numeric',
+            'cart.*.unit_price' => 'required|numeric',
+            'address' => 'required|string',
+            'amount' => 'required|numeric',
+            'total' => 'required|numeric',
         ]);
 
         DB::beginTransaction();
 
         try {
-            foreach ($validated['inputs'] as $input) {
-                $product = Product::find($input['product_id']);
+            if ($validated['cart'] < 1) {
+                return back()->with('error', 'Cart is empty!');
+            }
+
+            $order = Order::create([
+                'invoice' => invoiceNumber(),
+                'amount' => $validated['amount'],
+                'total' => $validated['total'],
+                'status' => 1,
+            ]);
+
+            OrderDetail::create([
+                'user_id' => $user->id,
+                'order_id' => $order->id,
+                'address' => $validated['address'],
+            ]);
+
+            foreach ($validated['cart'] as $item) {
+                $product = Product::find($item['product_id']);
+
                 if (!$product) {
-                    return back()->with('error', 'Product not found.');
-                }
-                else if ($product->stock < $input['qty']) {
-                    return back()->with('error', 'Product ' . $product->name . ' is out of stock');
-
-                }
-
-                $totalPrice = $product->price * $input['qty'];
-
-                if ($input['amount'] < $totalPrice) {
-                    return back()->with('error', 'Amount must be greater than Total');
+                    return back()->with('error', 'Product not found!');
+                    if ($product->stock < $item['qty']) {
+                        return back()->with('error', 'Product ' . $product->name . ' is out of stock');
+                    }
                 }
 
-                $order = Order::create([
-                    'invoice' => invoiceNumber(),
-                    'amount' => $input['amount'],
-                    'status' => 1,
-                    'user_id' => $user->id,
-                ]);
-
-                OrderDetail::create([
+                OrderProduct::create([
                     'order_id' => $order->id,
-                    'product_id' => $input['product_id'],
-                    'qty' => $input['qty'],
-                    'total' => $totalPrice,
+                    'product_id' => $item['product_id'],
+                    'qty' => $item['qty'],
+                    'unit_price' => $product->price,
                 ]);
 
-                $product->stock -= $input['qty'];
+                $product->stock -= $item['qty'];
                 $product->save();
-
             }
 
             DB::commit();

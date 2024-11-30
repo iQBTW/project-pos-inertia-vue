@@ -12,7 +12,7 @@ const showSidebar = ref(true);
 </script>
 <template>
     <nav
-        class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+        class="fixed z-30 w-full bg-white shadow-lg shadow-black/7.5 backdrop-blur border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
     >
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
@@ -130,7 +130,7 @@ const showSidebar = ref(true);
         </div>
     </nav>
 
-    <div class="flex pt-16 overflow-hidden bg-orange-500 dark:bg-gray-900">
+    <div class="flex pt-16 overflow-hidden dark:bg-gray-900">
         <aside
             class="fixed top-0 left-0 z-20 flex-col flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 transition-width"
             :class="{

@@ -30,6 +30,7 @@ const formCategory = reactive({
 });
 
 const isEdit = ref(false);
+const isDelete = ref(false);
 const showModal = ref(false);
 
 const emit = defineEmits(["search"]);
@@ -58,6 +59,7 @@ const pageTo = (url) => {
 //Create Modal
 const openCreateModal = () => {
     isEdit.value = false;
+    isDelete.value = false;
     showModal.value = true;
 
     formCategory.name = null;
@@ -66,11 +68,27 @@ const openCreateModal = () => {
 //Edit Modal
 const openEditModal = (category, index) => {
     isEdit.value = true;
+    isDelete.value = false;
     showModal.value = true;
 
     formCategory.name = category.name;
     formCategory.id = category.id;
 };
+
+//Delete Modal
+const openDeleteModal = (category, index) => {
+    isEdit.value = false;
+    isDelete.value = true;
+    showModal.value = true;
+
+    formCategory.name = category.name;
+    formCategory.id  = category.id
+}
+
+const confirmDelete = () => {
+    deleteCategory(formCategory.id);
+    showModal.value = false;
+}
 
 //Create
 const storeCategory = () => {
@@ -269,57 +287,13 @@ const deleteCategory = (id) => {
                             </svg>
                             Add Category
                         </Button>
-                        <Dialog
-                            class="bg-white"
-                            v-model:visible="showModal"
-                            modal
-                            :header="isEdit ? 'Edit Category' : 'Create Category'"
-                            :style="{ width: '25rem' }"
-                        >
-                            <form @submit.prevent="isEdit ? updateCategory() : storeCategory()">
-                                <span
-                                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
-                                    >{{ isEdit ? 'Edit an existing Category' : 'Create a new Category' }}</span
-                                >
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="">
-                                        <label
-                                            for="name"
-                                            class="font-semibold w-[6rem]"
-                                            >Category Name</label
-                                        >
-                                    </div>
-                                    <InputText
-                                        id="name"
-                                        v-model="formCategory.name"
-                                        class="flex-auto border-0 ring-1 ring-bg-primary-500 focus:ring-1 focus:ring-primary-500"
-                                        autocomplete="off"
-                                    />
-                                </div>
-                                <div class="flex justify-end gap-2">
-                                    <Button
-                                        type="button"
-                                        label="Cancel"
-                                        severity="danger"
-                                        class="hover:bg-red-700 transition-all ease-in 3s"
-                                        @click="showModal = false"
-                                    ></Button>
-                                    <Button
-                                        type="submit"
-                                        class="hover:bg-green-700 transition-all ease-in 3s"
-                                        severity="success"
-                                        label="Save"
-                                    ></Button>
-                                </div>
-                            </form>
-                        </Dialog>
                     </div>
                 </div>
             </template>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2 pb-2">
-            <div class="w-full px-2">
+        <div class="pt-2 pb-2">
+            <div class="w-full px-2 bg-gray-300/50 min-h-screen pt-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>
@@ -343,7 +317,7 @@ const deleteCategory = (id) => {
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
-                                    @click.prevent="deleteCategory(category.id)"
+                                    @click.prevent="openDeleteModal(category, index)"
                                 >
                                     Delete
                                 </Button>
@@ -390,5 +364,56 @@ const deleteCategory = (id) => {
                 </div>
             </div>
         </div>
+
+        <Dialog
+            class="bg-white"
+            v-model:visible="showModal"
+            modal
+            :header="isEdit ? 'Edit Category' : isDelete ? 'Delete Category' : 'Create Category'"
+            :style="{ width: '25rem' }"
+        >
+            <form @submit.prevent="isEdit ? updateCategory() : isDelete ? confirmDelete() : storeCategory()">
+                <span
+                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
+                    >{{ isEdit ? 'Edit an existing Category' : isDelete ? 'Delete an existing Category' : 'Create a new Category' }}</span
+                >
+
+                <div v-if="!isDelete" class="flex items-center gap-3 mb-3">
+                    <div class="">
+                        <label
+                            for="name"
+                            class="font-semibold w-[6rem]"
+                            >Category Name</label
+                        >
+                    </div>
+                    <InputText
+                        id="name"
+                        v-model="formCategory.name"
+                        class="flex-auto border-0 ring-1 ring-bg-primary-500 focus:ring-1 focus:ring-primary-500"
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div v-if="isDelete" class="">
+                    <p>Are you sure you want to delete <b>{{ formCategory.name }}</b> category?</p>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        label="Cancel"
+                        severity="danger"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        @click="showModal = false"
+                    ></Button>
+                    <Button
+                        type="submit"
+                        :class="isEdit ? 'hover:bg-green-700 transition-all ease-in 3s' : isDelete ? 'hover:bg-red-700 transition-all ease-in 3s' : 'hover:bg-green-700 transition-all ease-in 3s'"
+                        :severity="isEdit ? 'success' : isDelete ? 'warning' : 'success'"
+                        :label="isEdit ? 'Submit' : isDelete ? 'Delete' : 'Submit'"
+                    ></Button>
+                </div>
+            </form>
+        </Dialog>
     </AdminLayout>
 </template>

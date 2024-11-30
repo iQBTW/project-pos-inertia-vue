@@ -11,8 +11,9 @@ import {
 } from "flowbite-vue";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Searchbar from "@/Components/Searchbar.vue";
+import Dialog from "primevue/dialog";
 import Button from "primevue/button";
-import { ref, watch, inject } from "vue";
+import { ref, watch, inject, reactive } from "vue";
 
 const props = defineProps({
     orders: Array,
@@ -20,9 +21,15 @@ const props = defineProps({
 
 const Swal = inject("$swal");
 
-const emit = defineEmits(["search"]);
+const form = reactive({
+    id: null,
+    invoice: null,
+})
+
+const showModal = ref(false);
 
 // Searchbar
+const emit = defineEmits(["search"]);
 const search = ref("");
 const onSearch = () => {
     router.get(
@@ -41,6 +48,17 @@ watch(search, (value) => {
 // Pagination
 const pageTo = (url) => {
     router.get(url);
+};
+
+// Delete Modal
+const openDeleteModal = (order, index) => {
+    showModal.value = true;
+    form.id = order.id;
+    form.name = order.name;
+}
+const confirmDelete = () => {
+    deleteOrder(form.id);
+    showModal.value = false;
 };
 
 // Edit
@@ -164,8 +182,8 @@ const deleteOrder = (id) => {
             </template>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2 pb-2">
-            <div class="w-full px-2">
+        <div class="pt-2 pb-2">
+            <div class="w-full px-2 bg-gray-300/50 min-h-screen pt-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>
@@ -198,7 +216,7 @@ const deleteOrder = (id) => {
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
                                 >
-                                    <a @click.prevent="deleteOrder(order.id)">Delete</a>
+                                    <a @click.prevent="openDeleteModal(order, index)">Delete</a>
                                 </Button>
                             </fwb-table-cell>
                         </fwb-table-row>
@@ -240,5 +258,40 @@ const deleteOrder = (id) => {
                 </div>
             </div>
         </div>
+
+        <Dialog
+            class="bg-white"
+            v-model:visible="showModal"
+            modal
+            header="Delete Order"
+            :style="{ width: '25rem' }"
+        >
+            <form @submit.prevent="confirmDelete()">
+                <span
+                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
+                    >Delete an existing Order</span
+                >
+
+                <div class="pb-2">
+                    <p>Are you sure you want to delete this <b>{{ form.invoice }}</b> Order?</p>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        label="Cancel"
+                        severity="danger"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        @click="showModal = false"
+                    ></Button>
+                    <Button
+                        type="submit"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        severity="warning"
+                        label="Delete"
+                    ></Button>
+                </div>
+            </form>
+        </Dialog>
     </AdminLayout>
 </template>

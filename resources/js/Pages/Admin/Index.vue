@@ -62,7 +62,7 @@ const chartOptions = {
     <Head title="Dashboard" />
 
     <AdminLayout>
-        <div class="my-2 mx-2">
+        <div class="my-2 mx-2 pl-2 bg-gray-300/50 min-h-screen">
             <div class="flex flex-wrap items-center justify-center gap-20 md:justify-between lg:justify-between xl:justify-between 2xl:justify-between lg:gap-2 md:gap-20 sm:gap-2 my-6">
                 <div
                     class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"

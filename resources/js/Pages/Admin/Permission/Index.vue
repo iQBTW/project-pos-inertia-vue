@@ -29,11 +29,12 @@ const formPermission = reactive({
 });
 
 const isEdit = ref(false);
+const isDelete = ref(false);
 const showModal = ref(false);
 
-const emit = defineEmits(["search"]);
 
 // Searchbar
+const emit = defineEmits(["search"]);
 const search = ref("");
 const onSearch = () => {
     router.get(
@@ -66,10 +67,18 @@ const openEditModal = (permission, index) => {
     formPermission.id = permission.id;
 };
 
-const openDeleteModal = (permission, index) => {
+//Delete Modal
+const openDeleteModal = (permission, id) => {
+    isDelete.value = true;
+    isEdit.value = false;
     showModal.value = true;
 
-    formPermission.id  = permission.id
+    formPermission.name = permission.name;
+    formPermission.id = permission.id;
+};
+const confirmDelete = () => {
+    deletePermission(formPermission.id);
+    showModal.value = false;
 }
 
 //Create
@@ -178,7 +187,7 @@ const pageTo = (url) => {
 
     <AdminLayout>
         <!-- Header Section -->
-        <Breadcrumb title="All Roles">
+        <Breadcrumb title="All Permissions">
             <template #breadcrumb>
                 <li class="inline-flex items-center">
                     <Link
@@ -276,57 +285,13 @@ const pageTo = (url) => {
                             </svg>
                             Add Permission
                         </Button>
-                        <Dialog
-                            class="bg-white"
-                            v-model:visible="showModal"
-                            modal
-                            :header="isEdit ? 'Edit Permission' : 'Create Permission'"
-                            :style="{ width: '25rem' }"
-                        >
-                            <form @submit.prevent="isEdit ? updatePermission() : storePermission()">
-                                <span
-                                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
-                                    >{{ isEdit ? 'Edit an existing Permission' : 'Create a new Permission' }}</span
-                                >
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="">
-                                        <label
-                                            for="name"
-                                            class="font-semibold w-[6rem]"
-                                            >Permission Name</label
-                                        >
-                                    </div>
-                                    <InputText
-                                        id="name"
-                                        v-model="formPermission.name"
-                                        class="flex-auto border-0 ring-1 ring-bg-primary-500 focus:ring-1 focus:ring-primary-500"
-                                        autocomplete="off"
-                                    />
-                                </div>
-                                <div class="flex justify-end gap-2">
-                                    <Button
-                                        type="button"
-                                        label="Cancel"
-                                        severity="danger"
-                                        class="hover:bg-red-700 transition-all ease-in 3s"
-                                        @click="showModal = false"
-                                    ></Button>
-                                    <Button
-                                        type="submit"
-                                        class="hover:bg-green-700 transition-all ease-in 3s"
-                                        severity="success"
-                                        label="Save"
-                                    ></Button>
-                                </div>
-                            </form>
-                        </Dialog>
                     </div>
                 </div>
             </template>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2 pb-2">
-            <div class="w-full px-2">
+        <div class="pt-2 pb-2">
+            <div class="w-full px-2 bg-gray-300/50 min-h-screen pt-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>
@@ -349,7 +314,7 @@ const pageTo = (url) => {
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
-                                    @click.prevent = "deletePermission(permission.id)"
+                                    @click.prevent = "openDeleteModal(permission, permission.id)"
                                 >
                                     Delete
                                 </Button>
@@ -357,7 +322,7 @@ const pageTo = (url) => {
                         </fwb-table-row>
                     </fwb-table-body>
                 </fwb-table>
-                <!-- <div class="flex items-center justify-between mt-2 gap-3">
+                <div class="flex items-center justify-between mt-2 gap-3">
                     <span class="text-sm text-gray-700 dark:text-gray-400">
                         Showing
                         <span
@@ -367,17 +332,17 @@ const pageTo = (url) => {
                         to
                         <span
                             class="font-semibold text-gray-900 dark:text-white"
-                            >{{ roles.per_page }}</span
+                            >{{ permissions.per_page }}</span
                         >
                         of
                         <span
                             class="font-semibold text-gray-900 dark:text-white"
-                            >{{ roles.total }}</span
+                            >{{ permissions.total }}</span
                         >
                         Entries
                     </span>
                     <ul class="flex items-center -space-x-px h-10 text-base">
-                        <li v-for="(item, index) in roles.links" :key="index">
+                        <li v-for="(item, index) in permissions.links" :key="index">
                             <a
                                 href="#"
                                 @click="pageTo(item.url)"
@@ -390,8 +355,59 @@ const pageTo = (url) => {
                             ></a>
                         </li>
                     </ul>
-                </div> -->
+                </div>
             </div>
         </div>
+
+        <Dialog
+            class="bg-white"
+            v-model:visible="showModal"
+            modal
+            :header="isEdit ? 'Edit Permission' : isDelete ? 'Delete Permission' : 'Create Permission'"
+            :style="{ width: '25rem' }"
+        >
+            <form @submit.prevent="isEdit ? updatePermission() : isDelete ? confirmDelete() : storePermission()">
+                <span
+                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
+                    >{{ isEdit ? 'Edit an existing Permission' : isDelete ? 'Delete an existing Permission' : 'Create a new Permission' }}</span
+                >
+
+                <div v-if="!isDelete" class="flex items-center gap-3 mb-3">
+                    <div class="">
+                        <label
+                            for="name"
+                            class="font-semibold w-[6rem]"
+                            >Permission Name</label
+                        >
+                    </div>
+                    <InputText
+                        id="name"
+                        v-model="formPermission.name"
+                        class="flex-auto border-0 ring-1 ring-bg-primary-500 focus:ring-1 focus:ring-primary-500"
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div v-if="isDelete" class="">
+                    <p>Are you sure you want to delete <b>{{ formPermission.name }}</b> Permission?</p>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        label="Cancel"
+                        severity="danger"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        @click="showModal = false"
+                    ></Button>
+                    <Button
+                        type="submit"
+                        :class="isEdit ? 'hover:bg-green-700 transition-all ease-in 3s' : isDelete ? 'hover:bg-red-700 transition-all ease-in 3s' : 'hover:bg-green-700 transition-all ease-in 3s'"
+                        :severity="isEdit ? 'success' : isDelete ? 'warning' : 'success'"
+                        :label="isEdit ? 'Submit' : isDelete ? 'Delete' : 'Submit'"
+                    ></Button>
+                </div>
+            </form>
+        </Dialog>
     </AdminLayout>
 </template>

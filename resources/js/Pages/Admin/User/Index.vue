@@ -13,15 +13,35 @@ import {
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Searchbar from "@/Components/Searchbar.vue";
 import Button from "primevue/button";
-import { ref, watch } from "vue";
+import Dialog from "primevue/dialog";
+import { ref, watch, inject, reactive } from "vue";
+
+const Swal = inject('$swal')
 
 const props = defineProps({
     users: Object,
 });
 
-const emit = defineEmits(["search"]);
+const form = reactive({
+    id: null,
+    name: null,
+})
+
+const showModal = ref(false);
+
+// Delete Modal
+const openDeleteModal = (user, id) => {
+    showModal.value = true;
+    form.id = user.id;
+    form.name = user.name
+}
+const confirmDelete = () => {
+    deleteUser(form.id);
+    showModal.value = false;
+}
 
 // Searchbar
+const emit = defineEmits(["search"]);
 const search = ref("");
 const onSearch = () => {
     router.get(
@@ -44,7 +64,28 @@ const editUser = (id) => {
 
 //Delete
 const deleteUser = (id) => {
-    router.delete('/dashboard/user/' + id);
+    router.delete('/dashboard/user/' + id, {
+        onSuccess: (success) => {
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                position: "top-end",
+                title: "User Deleted Successfully",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        },
+        onError: (errors) => {
+            Swal.fire({
+                toast: true,
+                icon: "error",
+                position: "top-end",
+                title: "There was an error",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        },
+    });
 }
 
 // Pagination
@@ -162,8 +203,8 @@ const pageTo = (url) => {
             </template>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2 pb-2">
-            <div class="w-full px-2">
+        <div class="pt-2 pb-2">
+            <div class="w-full px-2 bg-gray-300/50 min-h-screen pt-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>
@@ -191,7 +232,7 @@ const pageTo = (url) => {
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
-                                    @click.prevent = "deleteUser(user.id)"
+                                    @click.prevent = "openDeleteModal(user, user.id)"
                                 >
                                     Delete
                                 </Button>
@@ -235,5 +276,40 @@ const pageTo = (url) => {
                 </div>
             </div>
         </div>
+
+        <Dialog
+            class="bg-white"
+            v-model:visible="showModal"
+            modal
+            header="Delete User"
+            :style="{ width: '25rem' }"
+        >
+            <form @submit.prevent="confirmDelete()">
+                <span
+                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
+                    >Delete an existing User</span
+                >
+
+                <div class="">
+                    <p>Are you sure you want to delete this <b>{{ form.name }}</b> User?</p>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        label="Cancel"
+                        severity="danger"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        @click="showModal = false"
+                    ></Button>
+                    <Button
+                        type="submit"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        severity="warning"
+                        label="Delete"
+                    ></Button>
+                </div>
+            </form>
+        </Dialog>
     </AdminLayout>
 </template>

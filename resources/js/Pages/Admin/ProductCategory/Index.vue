@@ -357,8 +357,8 @@ const deleteCategory = (id) => {
             </template>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2 pb-2">
-            <div class="w-full px-2">
+        <div class="pt-2 pb-2">
+            <div class="w-full px-2 bg-gray-300/50 min-h-screen pt-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>

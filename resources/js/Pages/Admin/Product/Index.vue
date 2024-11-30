@@ -12,7 +12,8 @@ import {
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import Searchbar from "@/Components/Searchbar.vue";
 import Button from "primevue/button";
-import { ref, watch, inject } from "vue";
+import Dialog from "primevue/dialog";
+import { ref, watch, inject, reactive } from "vue";
 
 const Swal = inject('$swal')
 
@@ -20,9 +21,15 @@ const props = defineProps({
     products: Object,
 });
 
-const emit = defineEmits(["search"]);
+const showModal = ref(false);
+
+const form = reactive({
+    id: null,
+    name: null,
+});
 
 //Searchbar
+const emit = defineEmits(["search"]);
 const search = ref("");
 const onSearch = () => {
     router.get(
@@ -37,6 +44,19 @@ const onSearch = () => {
 watch(search, (value) => {
     emit("search", value);
 });
+
+//DeleteModal
+const openDeleteModal = (product, index) => {
+    showModal.value = true;
+
+    form.id = product.id
+    form.name = product.name
+}
+
+const confirmDelete = () => {
+    deleteProduct(form.id);
+    showModal.value = false;
+}
 
 //Edit
 const editProduct = (id) => {
@@ -186,8 +206,8 @@ const pageTo = (url) => {
             </template>
         </Breadcrumb>
 
-        <div class="flex justify-center pt-2 pb-2">
-            <div class="w-full px-2">
+        <div class="pt-2 pb-2">
+            <div class="w-full px-2 bg-gray-300/50 min-h-screen pt-2">
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>No</fwb-table-head-cell>
@@ -219,7 +239,7 @@ const pageTo = (url) => {
                                 <Button
                                     severity="danger"
                                     class="transition-all ease-in 3s border hover:text-white hover:bg-red-800"
-                                    @click.prevent="deleteProduct(product.id)"
+                                    @click.prevent="openDeleteModal(product, index)"
                                 >
                                     Delete
                                 </Button>
@@ -266,5 +286,40 @@ const pageTo = (url) => {
                 </div>
             </div>
         </div>
+
+        <Dialog
+            class="bg-white"
+            v-model:visible="showModal"
+            modal
+            header="Delete Product"
+            :style="{ width: '25rem' }"
+        >
+            <form @submit.prevent="confirmDelete()">
+                <span
+                    class="text-surface-600 dark:text-surface-0/70 block mb-5"
+                    >Delete an existing Product</span
+                >
+
+                <div class="">
+                    <p>Are you sure you want to delete <b>{{ form.name }}</b> Product?</p>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        label="Cancel"
+                        severity="danger"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        @click="showModal = false"
+                    ></Button>
+                    <Button
+                        type="submit"
+                        class="hover:bg-red-700 transition-all ease-in 3s"
+                        severity="warning"
+                        label="Delete"
+                    ></Button>
+                </div>
+            </form>
+        </Dialog>
     </AdminLayout>
 </template>

@@ -15,7 +15,7 @@ const formProduct = useForm({
     name: null,
     stock: null,
     price: null,
-    category_id: null,
+    category_ids: [],
     images: [],
 });
 
@@ -28,7 +28,9 @@ const storeProduct = () => {
     formData.append('name', formProduct.name);
     formData.append('stock', formProduct.stock);
     formData.append('price', formProduct.price);
-    formData.append('category_id', formProduct.category_id);
+    formProduct.category_ids.forEach((categoryId) => {
+        formData.append("category_ids[]", categoryId);
+    });
     for (let i = 0; i < formProduct.images.length; i++) {
         formData.append('images[]', formProduct.images[i]);
     }
@@ -36,7 +38,7 @@ const storeProduct = () => {
     router.post(route("product.store"), formData, {
         onError: () => {
             Swal.fire({
-                toats: true,
+                toast: true,
                 icon: "error",
                 position: "top-end",
                 title: "There was an error",
@@ -46,7 +48,7 @@ const storeProduct = () => {
         },
         onSuccess: () => {
             Swal.fire({
-                toats: true,
+                toast: true,
                 icon: "success",
                 position: "top-end",
                 title: "Product Created Successfully",
@@ -168,25 +170,28 @@ const storeProduct = () => {
                             v-model="formProduct.price"
                         />
                     </div>
-                    <div class="">
+                    <div class="w-[295px]">
                         <div class="py-2">
                             <label for="category">Category</label>
                         </div>
-                        <select
-                            name="category_id"
-                            class="flex-auto w-[295px] rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 focus:transition-all ease-in-out 3s"
-                            id=""
-                            v-model="formProduct.category_id"
-                        >
-                            <option value="" selected>Category</option>
-                            <option
+                        <div class="gap-4">
+                            <div
                                 v-for="category in categories"
                                 :key="category.id"
-                                :value="category.id"
+                                class="flex items-center gap-2"
                             >
-                                {{ category.name }}
-                            </option>
-                        </select>
+                                <input
+                                    type="checkbox"
+                                    class="w-4 h-4 rounded-md border-0 ring-1 ring-slate-700 focus:border-0 focus:ring-primary-500 transition-all ease-in-out 3s"
+                                    :id="`category-${category.id}`"
+                                    :value="category.id"
+                                    v-model="formProduct.category_ids"
+                                />
+                                <label :for="`category-${category.id}`">
+                                    {{ category.name }}
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="py-2">
                         <div class="py-2">

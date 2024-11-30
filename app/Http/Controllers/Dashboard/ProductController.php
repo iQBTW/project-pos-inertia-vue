@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Models\ProductCategory;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Category;
@@ -22,6 +23,7 @@ class ProductController extends Controller
                 $query->where('products.name', 'like', '%' . $q . '%');
             })->paginate(10);
 
+
         foreach ($products as $product) {
             $product->price = currencyFormat($product->price);
         }
@@ -37,8 +39,10 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $categories = Category::all();
+
         return Inertia::render('Admin/Product/Create', [
-            'categories' => Category::all(),
+            'categories' => $categories,
         ]);
     }
 
@@ -51,7 +55,8 @@ class ProductController extends Controller
             'name' => 'required|unique:products,name|max:255',
             'stock' => 'required|numeric',
             'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
+            'category_ids' => 'array',
+            'category_ids.*' => 'exists:categories,id',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -62,8 +67,14 @@ class ProductController extends Controller
                 'name' => $validated['name'],
                 'stock' => $validated['stock'],
                 'price' => $validated['price'],
-                'category_id' => $validated['category_id'],
             ]);
+
+            foreach ($validated['category_ids'] as $category_id) {
+                ProductCategory::create([
+                    'product_id' => $product->id,
+                    'category_id' => $category_id
+                ]);
+            }
 
             // Proses gambar-gambar yang diupload
             if ($request->hasFile('images')) {

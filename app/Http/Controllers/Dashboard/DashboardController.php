@@ -44,7 +44,6 @@ class DashboardController extends Controller
             ->groupBy('categories.id', 'categories.name')
             ->get();
 
-        // return $orderCountByCategory;
         return Inertia::render('Admin/Index', [
             'orderCountByCategory' => $orderCountByCategory,
             'bestSellingProducts' => $bestSellingProducts,

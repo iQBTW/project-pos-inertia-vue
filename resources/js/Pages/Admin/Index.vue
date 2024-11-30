@@ -66,7 +66,7 @@ const chartOptions = {
         <div class="my-2 mx-2 pl-2 bg-gray-300/50 min-h-screen">
             <div class="flex flex-wrap items-center justify-center gap-20 md:justify-between lg:justify-between xl:justify-between 2xl:justify-between lg:gap-2 md:gap-20 sm:gap-2 my-6">
                 <div
-                    class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
+                    class="bg-white rounded-lg shadow-lg px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
                 >
                     <div class="flex items-center justify-between">
                         <div>
@@ -99,7 +99,7 @@ const chartOptions = {
                     </div>
                 </div>
                 <div
-                    class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
+                    class="bg-white rounded-lg shadow-lg px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
                 >
                     <div class="flex items-center justify-between">
                         <div>
@@ -132,7 +132,7 @@ const chartOptions = {
                     </div>
                 </div>
                 <div
-                    class="bg-white rounded-lg border border-slate-800 px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
+                    class="bg-white rounded-lg shadow-lg px-10 py-8 w-[430px] md:w-[300px] lg:w-[300px] xl:w-[300px] 2xl:w-[430px]"
                 >
                     <div class="flex items-center justify-between">
                         <div>
@@ -167,7 +167,7 @@ const chartOptions = {
             <div class="flex flex-wrap items-baseline justify-center 2xl:justify-between md:gap-2 lg:gap-2 xl:gap-2">
                 <div class="my-4">
                     <div
-                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[380px] md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:w-[700px]"
+                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[380px] md:w-[490px] lg:w-[490px] xl:w-[490px] 2xl:w-[760px]"
                     >
                         <div class="px-5 pt-5 pb-2 font-bold">
                             <h2>Total Orders by Product Category</h2>
@@ -182,7 +182,7 @@ const chartOptions = {
                 </div>
                 <div class="my-4">
                     <div
-                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[380px] md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:w-[700px]"
+                        class="bg-white rounded-lg border border-slate-800 shadow-md w-[380px] md:w-[490px] lg:w-[490px] xl:w-[490px] 2xl:w-[760px]"
                     >
                         <div class="px-5 pt-5 pb-2 font-bold">
                             <h2>Best Selling Products</h2>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Models\OrderProduct;
+use App\Models\ProductCategory;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Order;
@@ -34,20 +35,18 @@ class DashboardController extends Controller
             ->orderBy('order_count', 'desc')
             ->get();
 
-        // $orderByCategory = OrderDetail::select(
-        //     // 'categories.id as category_id',
-        //     // 'categories.name as category',
-        //     DB::raw('COUNT(order_details.id) as order_count')
-        // )
-        //     ->join('products', 'order_details.product_id', '=', 'products.id')
-        //     // ->rightjoin('categories', 'products.category_id', '=', 'categories.id')
-        //     ->groupBy('categories.id', 'categories.name')
-        //     ->orderBy('order_count', 'desc')
-        //     ->get();
+        $orderCountByCategory = DB::table('categories')
+            ->leftjoin('product_categories', 'categories.id', '=', 'product_categories.category_id')
+            ->leftjoin('products', 'product_categories.product_id', '=', 'products.id')
+            ->leftjoin('order_products', 'products.id', '=', 'order_products.product_id')
+            ->leftjoin('orders', 'order_products.order_id', '=', 'orders.id')
+            ->select('categories.name as category', DB::raw('COUNT(DISTINCT orders.id) as order_count'))
+            ->groupBy('categories.id', 'categories.name')
+            ->get();
 
-
+        // return $orderCountByCategory;
         return Inertia::render('Admin/Index', [
-            // 'orderByCategory' => $orderByCategory,
+            'orderCountByCategory' => $orderCountByCategory,
             'bestSellingProducts' => $bestSellingProducts,
             'categories' => $categories,
             'orderTotal' => $orderTotal,

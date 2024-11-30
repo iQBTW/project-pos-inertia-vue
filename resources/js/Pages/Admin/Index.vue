@@ -18,6 +18,7 @@ const props = defineProps({
     productTotal: Number,
     userTotal: Number,
     bestSellingProducts: Object,
+    orderCountByCategory: Object,
 });
 
 
@@ -39,17 +40,17 @@ const randomColor = () => {
     return color;
 };
 
-// const chartOrderData = {
-//     labels: ["Total Orders"],
-//     datasets: props.categories.map((category) => ({
-//         label: category.name,
-//         data: props.orderByCategory
-//             .filter((item) => item.category == category.name)
-//             .map((item) => item.order_count),
-//         backgroundColor: randomColor(),
-//         borderColor: "rgba(1, 1, 1, 1)",
-//     })),
-// };
+const chartOrderData = {
+    labels: ["Total Orders"],
+    datasets: props.categories.map((category) => ({
+        label: category.name,
+        data: props.orderCountByCategory
+            .filter((item) => item.category == category.name)
+            .map((item) => item.order_count),
+        backgroundColor: randomColor(),
+        borderColor: "rgba(1, 1, 1, 1)",
+    })),
+};
 
 
 const chartOptions = {
@@ -174,6 +175,7 @@ const chartOptions = {
                         <Bar
                             class="px-5"
                             id="orderByCategory"
+                            :data="chartOrderData"
                             :options="chartOptions"
                         />
                     </div>

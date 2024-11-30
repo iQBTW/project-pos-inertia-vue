@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use PHPUnit\Framework\Exception;
 
-class TransactionController extends Controller
+class PurchaseController extends Controller
 {
     public function index()
     {
@@ -23,7 +23,7 @@ class TransactionController extends Controller
             $product->price = number_format($product->price, 0, '.', '');
         }
 
-        return Inertia::render('Admin/Transaction/Index', [
+        return Inertia::render('Admin/Purchase/Index', [
             'products' => $products,
             'user' => $user
         ]);

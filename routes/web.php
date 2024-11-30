@@ -12,7 +12,7 @@ use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\PermissionController;
-use App\Http\Controllers\Dashboard\TransactionController;
+use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Route::get('/', function () {
@@ -59,9 +59,9 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
         Route::delete('{order}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('transaction')->name('transaction.')->group(function () {
-        Route::get('', [TransactionController::class, 'index'])->name('index');
-        Route::post('store', [TransactionController::class, 'store'])->name('store');
+    Route::prefix('purchase')->name('purchase.')->group(function () {
+        Route::get('', [PurchaseController::class, 'index'])->name('index');
+        Route::post('store', [PurchaseController::class, 'store'])->name('store');
     });
 
     Route::prefix('category')->name('category.')->group(function () {

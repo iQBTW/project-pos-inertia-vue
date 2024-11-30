@@ -380,12 +380,12 @@ const showSidebar = ref(true);
                             </fwb-sidebar-item>
                         </Link>
                         <hr />
-                        <Link :href="route('transaction.index')">
+                        <Link :href="route('purchase.index')">
                             <fwb-sidebar-item
                                 class="hover:bg-primary-highlight transition-all ease-in 3s mt-2"
                                 :class="{
                                     '!bg-primary-active-color !text-white':
-                                        route().current('transaction.index'),
+                                        route().current('purchase.index'),
                                 }"
                             >
                                 <template #icon>
@@ -394,7 +394,7 @@ const showSidebar = ref(true);
                                         :class="{
                                             '!text-white':
                                                 route().current(
-                                                    'transaction.index'
+                                                    'purchase.index'
                                                 ),
                                         }"
                                         aria-hidden="true"

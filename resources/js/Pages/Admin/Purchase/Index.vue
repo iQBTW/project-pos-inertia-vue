@@ -126,7 +126,7 @@ const storeOrder = () => {
         };
     });
 
-    router.post(route("transaction.store"),
+    router.post(route("purchase.store"),
         {
             user_id: props.user.id,
             cart: cartData,

@@ -3,6 +3,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import Button from "primevue/button";
 import { reactive, computed, inject } from "vue";
+import NoImage from '../../../../../public/assets/img/no-photo.png'
 
 const Swal = inject("$swal");
 
@@ -174,10 +175,9 @@ const storeOrder = () => {
                                 class="flex items-center gap-2 w-fit py-2"
                             >
                                 <img
-                                    :src="
+                                    :src="product.image ?
                                         `/storage/${product.product_images[0]?.image}`
-                                            ? `/storage/${product.product_images[0]?.image}`
-                                            : ``
+                                            : NoImage
                                     "
                                     alt="Product Image"
                                     class="flex w-24 h-24"

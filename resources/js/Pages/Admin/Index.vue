@@ -11,6 +11,7 @@ import {
     CategoryScale,
     LinearScale,
 } from "chart.js";
+import NoImage from '../../../../public/assets/img/no-photo.png'
 
 const props = defineProps({
     categories: Array,
@@ -199,7 +200,7 @@ const chartOptions = {
                                 <div class="">
                                     <img
                                         class="block w-[100px]"
-                                        :src="`/storage/${product.image}`"
+                                        :src="product.image ? `/storage/${product.image}` : NoImage"
                                         alt="product-image"
                                     />
                                 </div>

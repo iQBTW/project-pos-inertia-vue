@@ -224,7 +224,7 @@ const pageTo = (url) => {
                             <fwb-table-cell class="text-center">{{ user.address }}</fwb-table-cell>
                             <fwb-table-cell class="flex items-center justify-center">
                                 <Button
-                                    class="transition-all ease-in 3s hover:text-yellow-300"
+                                    class="transition-all ease-in 3s border-0 hover:text-yellow-300"
                                     @click.prevent = "editUser(user.id)"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
@@ -232,7 +232,7 @@ const pageTo = (url) => {
                                     </svg>
                                 </Button>
                                 <Button
-                                    class="transition-all ease-in 3s border hover:text-red-800"
+                                    class="transition-all ease-in 3s border-0 hover:text-red-800"
                                     @click.prevent = "openDeleteModal(user, user.id)"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">

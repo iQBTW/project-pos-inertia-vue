@@ -207,7 +207,7 @@ const deleteOrder = (id) => {
                             <fwb-table-cell class="text-center">{{ order.status }}</fwb-table-cell>
                             <fwb-table-cell class="flex items-center justify-center">
                                 <Button
-                                    class="transition-all ease-in 3s border hover:text-yellow-300"
+                                    class="transition-all ease-in 3s border-0 hover:text-yellow-300"
                                     @click="editOrder(order.id)"
                                 >
 
@@ -216,7 +216,7 @@ const deleteOrder = (id) => {
                                     </svg>
                                 </Button>
                                 <Button
-                                    class="transition-all ease-in 3s border hover:text-red-800"
+                                    class="transition-all ease-in 3s border-0 hover:text-red-800"
                                     @click="openDeleteModal(order, index)"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">

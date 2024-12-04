@@ -134,12 +134,13 @@ const showSidebar = ref(true);
         <aside
             class="fixed top-0 left-0 z-20 flex-col flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 transition-width"
             :class="{
-                flex: showSidebar,
-                'lg:flex': showSidebar,
-                'lg:flex': !showSidebar,
+                // flex: showSidebar,
+                'xl:flex': showSidebar,
+                '2xl:flex': showSidebar,
                 hidden: !showSidebar,
                 'sm:hidden': !showSidebar,
                 'md:hidden': !showSidebar,
+                'lg:hidden': !showSidebar,
             }"
         >
             <div

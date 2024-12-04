@@ -14,10 +14,13 @@ use PHPUnit\Framework\Exception;
 
 class PurchaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('product_images')->get();
         $user = auth()->user();
+        $products = Product::with('product_images')
+            ->when($request->q, function ($query, $q) {
+                $query->where('products.name', 'like', '%' . $q . '%');
+            })->paginate(2);
 
         foreach ($products as $product) {
             $product->price = number_format($product->price, 0, '.', '');
@@ -25,7 +28,8 @@ class PurchaseController extends Controller
 
         return Inertia::render('Admin/Purchase/Index', [
             'products' => $products,
-            'user' => $user
+            'user' => $user,
+            'search' => $request->only('q'),
         ]);
     }
 

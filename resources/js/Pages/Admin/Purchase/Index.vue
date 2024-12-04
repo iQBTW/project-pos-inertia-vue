@@ -1,8 +1,9 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
+import { reactive, ref, watch, computed, inject } from "vue";
 import Button from "primevue/button";
-import { reactive, computed, inject } from "vue";
+import Searchbar from "@/Components/Searchbar.vue";
 import NoImage from '../../../../../public/assets/img/no-photo.png'
 
 const Swal = inject("$swal");
@@ -15,7 +16,7 @@ const props = defineProps({
 const form = reactive([
     {
         user_id: props.user.id,
-        product_id: props.products.id || "",
+        product_id: props.products.data.id || "",
         qty: 0,
         address: "",
         total_per_product: 0,
@@ -24,14 +25,64 @@ const form = reactive([
     },
 ]);
 
-const products = reactive(
-    props.products.map((product) => ({
+const productsData = reactive(
+    props.products.data.map((product) => ({
         ...product,
         qty: 0,
     }))
 );
 
-const cart = reactive([]);
+//Cart
+const cart = reactive(
+    JSON.parse(localStorage.getItem("cart")) || []
+);
+const saveCart = () => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+};
+const resetCart = () => {
+    localStorage.removeItem("cart", JSON.stringify(cart));
+}
+watch(
+    cart,
+    () => {
+        saveCart()
+    },
+    { deep:true }
+)
+
+// Search
+const emit = defineEmits(["search"]);
+const search = ref("");
+const onSearch = () => {
+    router.get(
+        route("purchase.index"),
+        { q: search.value },
+        {
+            preserveState: true,
+            replace: true,
+        }
+    );
+};
+watch(search, (value) => {
+    emit("search", value,);
+});
+
+// Pagination
+const pageTo = (url) => {
+    router.get(url, {
+        preserveState: true,
+        replace: true
+    });
+};
+const productsPagination = reactive({
+    links: props.products.links
+})
+watch(
+    () => props.products.links,
+    (newLinks) => {
+        productsPagination.links = newLinks;
+    }
+)
 
 const addToCart = (product) => {
     if (product.qty <= 0) {
@@ -155,6 +206,9 @@ const storeOrder = () => {
                     timer: 2000,
                 });
             },
+            onFinish: () => {
+                resetCart();
+            }
         }
     );
 };
@@ -165,13 +219,25 @@ const storeOrder = () => {
 
     <AdminLayout>
         <div class="flex justify-center">
-            <div class="px-4 w-full rounded-md shadow-md">
+            <div class="px-4 w-full rounded-md shadow-md bg-gray-300/70">
                 <form @submit.prevent="storeOrder">
-                    <div class="flex mt-4 items-baseline justify-evenly gap-3 w-full bg-gray-300/70 rounded-md">
+                    <div class="flex mt-4 items-baseline justify-evenly gap-3 w-full bg-white rounded-md">
                         <div class=" px-4 mt-4  w-[500px] 2xl:w-1/2">
-                            <div class="px-0 2xl:px-5 pb-2">
+                            <div class="px-0 2xl:px-5 pb-1">
+                                <div class="pb-2">
+                                    <Searchbar @submit.prevent="onSearch">
+                                        <input
+                                            v-model="search"
+                                            type="text"
+                                            name="productsSearch"
+                                            id="products-search"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 transition-all ease-in 3s"
+                                            placeholder="Search Products"
+                                        />
+                                    </Searchbar>
+                                </div>
                                 <div
-                                    v-for="product in products"
+                                    v-for="product in productsData"
                                     :key="product.id"
                                     class="flex items-center gap-2 w-fit py-2"
                                 >
@@ -202,6 +268,43 @@ const storeOrder = () => {
                                             +
                                         </span>
                                     </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-2 gap-3">
+                                    <span class="text-sm text-gray-700 dark:text-gray-400">
+                                        Showing
+                                        <span
+                                            class="font-semibold text-gray-900 dark:text-white"
+                                            >1</span
+                                        >
+                                        to
+                                        <span
+                                            class="font-semibold text-gray-900 dark:text-white"
+                                            >{{ products.per_page }}</span
+                                        >
+                                        of
+                                        <span
+                                            class="font-semibold text-gray-900 dark:text-white"
+                                            >{{ products.total }}</span
+                                        >
+                                        Entries
+                                    </span>
+                                    <ul class="flex items-center -space-x-px h-10 text-base">
+                                        <li
+                                            v-for="(item, index) in productsPagination.links"
+                                            :key="index"
+                                        >
+                                            <a
+                                                href="#"
+                                                @click.prevent="pageTo(item.url)"
+                                                :class="{
+                                                    'bg-primary-500 text-white transition-all ease-in 3s':
+                                                        item.active,
+                                                }"
+                                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border rounded-md border-gray-300 hover:bg-primary-500 hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-all ease-in 3s"
+                                                v-html="item.label"
+                                            ></a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -267,7 +370,7 @@ const storeOrder = () => {
                                             class="text-center border border-slate-300 py-2 px-5 "
                                         >
                                             <button
-                                                class="transition ease-in-out duration-300 hover:text-red-600"
+                                                class="transition ease-in-out duration-300 hover:text-red-600 cursor-pointer"
                                                 @click="
                                                     removeFromCart(item.product_id)
                                                 "

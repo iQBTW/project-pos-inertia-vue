@@ -20,7 +20,7 @@ class PurchaseController extends Controller
         $products = Product::with('product_images')
             ->when($request->q, function ($query, $q) {
                 $query->where('products.name', 'like', '%' . $q . '%');
-            })->paginate(2);
+            })->paginate(5);
 
         foreach ($products as $product) {
             $product->price = number_format($product->price, 0, '.', '');

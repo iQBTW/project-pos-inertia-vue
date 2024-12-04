@@ -31,6 +31,15 @@ const productsData = reactive(
         qty: 0,
     }))
 );
+watch(
+    () => props.products.data,
+    (newData) => {
+        productsData.splice(0, productsData.length, ...newData.map((product) => ({
+            ...product,
+            qty: 0,
+        })))
+    }
+)
 
 //Cart
 const cart = reactive(
@@ -391,7 +400,7 @@ const storeOrder = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-baseline justify-end gap-3 w-full pt-4">
+                    <div class="flex items-baseline justify-start pl-10 gap-3 w-full pt-4 bg-white">
                         <div class="flex gap-2 pb-2 2xl:px-5">
                             <div class="flex flex-col gap-2 w-[295px]">
                                 <label for="price">Amount</label>
@@ -417,7 +426,7 @@ const storeOrder = () => {
                             </textarea>
                         </div>
                     </div>
-                    <div class="text-end mt-5 mr-16">
+                    <div class="text-end mt-5 mb-2 mr-16">
                         <Button severity="success" type="submit">Order</Button>
                     </div>
                 </form>
